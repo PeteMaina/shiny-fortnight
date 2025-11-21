@@ -334,6 +334,12 @@ const Dashboard = () => {
         {menuItems.map((item) => (
           <ListItem key={item.text} disablePadding>
             <ListItemButton
+              onClick={() => {
+                if (!item.active) {
+                  const route = `/${item.text.toLowerCase().replace(/\s+/g, '-').replace('&', '').replace(' ', '-')}`;
+                  navigate(route);
+                }
+              }}
               sx={{
                 mx: 2,
                 mb: 1,
@@ -342,6 +348,7 @@ const Dashboard = () => {
                 color: item.active ? 'white' : 'text.primary',
                 '&:hover': {
                   backgroundColor: item.active ? 'primary.dark' : 'action.hover',
+                  cursor: item.active ? 'default' : 'pointer',
                 },
               }}
             >
@@ -898,7 +905,7 @@ const Dashboard = () => {
                         control={
                           <Switch
                             checked={autoIrrigation}
-                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setAutoIrrigation(e.target.checked)}
+                            onChange={(e) => setAutoIrrigation(e.target.checked)}
                           />
                         }
                         label="Auto"

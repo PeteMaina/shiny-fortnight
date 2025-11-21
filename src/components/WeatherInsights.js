@@ -1,6 +1,6 @@
 import React from 'react';
 import { Typography, Container, Box, Grid, Card, CardContent, CardHeader } from '@mui/material';
-import { Cloud, Thermometer, Opacity, WindPower } from '@mui/icons-material';
+import { Cloud, Thermostat as Thermometer, Opacity, WindPower } from '@mui/icons-material';
 
 const WeatherInsights = () => {
   return (

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Typography, Container, Box, Grid, Card, CardContent, CardHeader, LinearProgress } from '@mui/material';
-import { Grass, Science, Opacity, WaterDrop } from '@mui/icons-material';
+import { Grass, Science, Opacity } from '@mui/icons-material';
 
 const SoilManagement = () => {
   return (
