@@ -1,6 +1,6 @@
 import React from 'react';
 import { Typography, Container, Box, Grid, Card, CardContent, CardHeader, LinearProgress } from '@mui/material';
-import { Eco, Recycling, Nature } from '@mui/icons-material';
+import { NatureOutlined as Eco, Recycling, Nature } from '@mui/icons-material';
 
 const Sustainability = () => {
   return (
