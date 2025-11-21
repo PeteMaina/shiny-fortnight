@@ -1,6 +1,6 @@
 import React from 'react';
 import { Typography, Container, Box, Grid, Card, CardContent, CardHeader, Button, Switch, FormControlLabel } from '@mui/material';
-import { WaterDrop, PlayArrow, Stop } from '@mui/icons-material';
+import { Opacity as WaterDrop, PlayArrow, Stop } from '@mui/icons-material';
 
 const IrrigationControl = () => {
   return (

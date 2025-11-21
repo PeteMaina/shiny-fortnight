@@ -1,6 +1,6 @@
 import React from 'react';
 import { Typography, Container, Box, Grid, Card, CardContent, CardHeader, Button, TextField } from '@mui/material';
-import { Science, LocalFlorist } from '@mui/icons-material';
+import { Science, Grass as LocalFlorist } from '@mui/icons-material';
 
 const FertilizerPlanner = () => {
   return (

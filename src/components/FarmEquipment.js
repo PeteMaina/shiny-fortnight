@@ -40,7 +40,7 @@ const FarmEquipment = () => {
                       size="small"
                       sx={{ mr: 1 }}
                     />
-                    {item.status === 'Maintenance Required' && <Warning color="warning" />}
+                    {item.status === 'Maintenance Required' && <WarningIcon color="warning" />}
                   </Box>
                   <Typography variant="body2" sx={{ mb: 2 }}>
                     Maintenance: {item.maintenance}
