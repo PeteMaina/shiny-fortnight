@@ -44,7 +44,7 @@ const AuthPage: React.FC = () => {
     location: '',
     agreeToTerms: false,
   });
-  const [errors, setErrors] = useState<Record<string, string>>({});
+  const [errors, setErrors] = useState({});
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, checked } = e.target;
