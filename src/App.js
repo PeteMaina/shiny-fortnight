@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -23,7 +23,25 @@ import Sustainability from './components/Sustainability';
 import Settings from './components/Settings';
 import HelpSupport from './components/HelpSupport';
 
+import { getIPLocation, getPreferredLocation } from './utils/locationUtils';
+
 function App() {
+  const [userLocation, setUserLocation] = useState('');
+  const [locationDetails, setLocationDetails] = useState(null);
+
+  useEffect(() => {
+    async function fetchLocation() {
+      const ipLoc = await getIPLocation();
+      const preferredLoc = getPreferredLocation(userLocation, ipLoc);
+      setLocationDetails(preferredLoc);
+    }
+    fetchLocation();
+  }, [userLocation]);
+
+  const handleSetUserLocation = (location) => {
+    setUserLocation(location);
+  };
+
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
@@ -31,23 +49,23 @@ function App() {
         <Routes>
           <Route path="/" element={<LandingPage />} />
           <Route path="/auth" element={<AuthPage />} />
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/crop-analytics" element={<CropAnalytics />} />
-          <Route path="/soil-management" element={<SoilManagement />} />
-          <Route path="/irrigation-control" element={<IrrigationControl />} />
-          <Route path="/fertilizer-planner" element={<FertilizerPlanner />} />
-          <Route path="/yield-prediction" element={<YieldPrediction />} />
-          <Route path="/weather-insights" element={<WeatherInsights />} />
-          <Route path="/pest-control" element={<PestControl />} />
-          <Route path="/market-prices" element={<MarketPrices />} />
-          <Route path="/farm-equipment" element={<FarmEquipment />} />
-          <Route path="/labor-management" element={<LaborManagement />} />
-          <Route path="/financial-reports" element={<FinancialReports />} />
-          <Route path="/iot-sensors" element={<IoTSensors />} />
-          <Route path="/field-mapping" element={<FieldMapping />} />
-          <Route path="/sustainability" element={<Sustainability />} />
-          <Route path="/settings" element={<Settings />} />
-          <Route path="/help-support" element={<HelpSupport />} />
+          <Route path="/dashboard" element={<Dashboard location={locationDetails} onSetLocation={handleSetUserLocation} />} />
+          <Route path="/crop-analytics" element={<CropAnalytics location={locationDetails} />} />
+          <Route path="/soil-management" element={<SoilManagement location={locationDetails} />} />
+          <Route path="/irrigation-control" element={<IrrigationControl location={locationDetails} />} />
+          <Route path="/fertilizer-planner" element={<FertilizerPlanner location={locationDetails} />} />
+          <Route path="/yield-prediction" element={<YieldPrediction location={locationDetails} />} />
+          <Route path="/weather-insights" element={<WeatherInsights location={locationDetails} />} />
+          <Route path="/pest-control" element={<PestControl location={locationDetails} />} />
+          <Route path="/market-prices" element={<MarketPrices location={locationDetails} />} />
+          <Route path="/farm-equipment" element={<FarmEquipment location={locationDetails} />} />
+          <Route path="/labor-management" element={<LaborManagement location={locationDetails} />} />
+          <Route path="/financial-reports" element={<FinancialReports location={locationDetails} />} />
+          <Route path="/iot-sensors" element={<IoTSensors location={locationDetails} />} />
+          <Route path="/field-mapping" element={<FieldMapping location={locationDetails} />} />
+          <Route path="/sustainability" element={<Sustainability location={locationDetails} />} />
+          <Route path="/settings" element={<Settings location={locationDetails} onSetLocation={handleSetUserLocation} />} />
+          <Route path="/help-support" element={<HelpSupport location={locationDetails} />} />
         </Routes>
       </Router>
     </ThemeProvider>
