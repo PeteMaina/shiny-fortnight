@@ -28,6 +28,7 @@ import { getIPLocation, getPreferredLocation } from './utils/locationUtils';
 function App() {
   const [userLocation, setUserLocation] = useState('');
   const [locationDetails, setLocationDetails] = useState(null);
+  const [cropType, setCropType] = useState('corn');
 
   useEffect(() => {
     async function fetchLocation() {
@@ -42,6 +43,10 @@ function App() {
     setUserLocation(location);
   };
 
+  const handleSetCropType = (type) => {
+    setCropType(type);
+  };
+
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
@@ -49,23 +54,43 @@ function App() {
         <Routes>
           <Route path="/" element={<LandingPage />} />
           <Route path="/auth" element={<AuthPage />} />
-          <Route path="/dashboard" element={<Dashboard location={locationDetails} onSetLocation={handleSetUserLocation} />} />
-          <Route path="/crop-analytics" element={<CropAnalytics location={locationDetails} />} />
-          <Route path="/soil-management" element={<SoilManagement location={locationDetails} />} />
-          <Route path="/irrigation-control" element={<IrrigationControl location={locationDetails} />} />
-          <Route path="/fertilizer-planner" element={<FertilizerPlanner location={locationDetails} />} />
-          <Route path="/yield-prediction" element={<YieldPrediction location={locationDetails} />} />
-          <Route path="/weather-insights" element={<WeatherInsights location={locationDetails} />} />
-          <Route path="/pest-control" element={<PestControl location={locationDetails} />} />
-          <Route path="/market-prices" element={<MarketPrices location={locationDetails} />} />
-          <Route path="/farm-equipment" element={<FarmEquipment location={locationDetails} />} />
-          <Route path="/labor-management" element={<LaborManagement location={locationDetails} />} />
-          <Route path="/financial-reports" element={<FinancialReports location={locationDetails} />} />
-          <Route path="/iot-sensors" element={<IoTSensors location={locationDetails} />} />
-          <Route path="/field-mapping" element={<FieldMapping location={locationDetails} />} />
-          <Route path="/sustainability" element={<Sustainability location={locationDetails} />} />
-          <Route path="/settings" element={<Settings location={locationDetails} onSetLocation={handleSetUserLocation} />} />
-          <Route path="/help-support" element={<HelpSupport location={locationDetails} />} />
+          <Route
+            path="/dashboard"
+            element={
+              <Dashboard
+                location={locationDetails}
+                onSetLocation={handleSetUserLocation}
+                cropType={cropType}
+                onSetCropType={handleSetCropType}
+              />
+            }
+          />
+          <Route path="/crop-analytics" element={<CropAnalytics location={locationDetails} cropType={cropType} />} />
+          <Route path="/soil-management" element={<SoilManagement location={locationDetails} cropType={cropType} />} />
+          <Route path="/irrigation-control" element={<IrrigationControl location={locationDetails} cropType={cropType} />} />
+          <Route path="/fertilizer-planner" element={<FertilizerPlanner location={locationDetails} cropType={cropType} />} />
+          <Route path="/yield-prediction" element={<YieldPrediction location={locationDetails} cropType={cropType} />} />
+          <Route path="/weather-insights" element={<WeatherInsights location={locationDetails} cropType={cropType} />} />
+          <Route path="/pest-control" element={<PestControl location={locationDetails} cropType={cropType} />} />
+          <Route path="/market-prices" element={<MarketPrices location={locationDetails} cropType={cropType} />} />
+          <Route path="/farm-equipment" element={<FarmEquipment location={locationDetails} cropType={cropType} />} />
+          <Route path="/labor-management" element={<LaborManagement location={locationDetails} cropType={cropType} />} />
+          <Route path="/financial-reports" element={<FinancialReports location={locationDetails} cropType={cropType} />} />
+          <Route path="/iot-sensors" element={<IoTSensors location={locationDetails} cropType={cropType} />} />
+          <Route path="/field-mapping" element={<FieldMapping location={locationDetails} cropType={cropType} />} />
+          <Route path="/sustainability" element={<Sustainability location={locationDetails} cropType={cropType} />} />
+          <Route
+            path="/settings"
+            element={
+              <Settings
+                location={locationDetails}
+                onSetLocation={handleSetUserLocation}
+                cropType={cropType}
+                onSetCropType={handleSetCropType}
+              />
+            }
+          />
+          <Route path="/help-support" element={<HelpSupport location={locationDetails} cropType={cropType} />} />
         </Routes>
       </Router>
     </ThemeProvider>
