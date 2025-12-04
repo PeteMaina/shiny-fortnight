@@ -5,6 +5,7 @@ import CssBaseline from '@mui/material/CssBaseline';
 import theme from './theme';
 import LandingPage from './components/LandingPage';
 import AuthPage from './components/AuthPage';
+import Layout from './components/Layout';
 import Dashboard from './components/Dashboard';
 import CropAnalytics from './components/CropAnalytics';
 import SoilManagement from './components/SoilManagement';
@@ -57,40 +58,44 @@ function App() {
           <Route
             path="/dashboard"
             element={
-              <Dashboard
-                location={locationDetails}
-                onSetLocation={handleSetUserLocation}
-                cropType={cropType}
-                onSetCropType={handleSetCropType}
-              />
+              <Layout activeItem="Dashboard">
+                <Dashboard
+                  location={locationDetails}
+                  onSetLocation={handleSetUserLocation}
+                  cropType={cropType}
+                  onSetCropType={handleSetCropType}
+                />
+              </Layout>
             }
           />
-          <Route path="/crop-analytics" element={<CropAnalytics location={locationDetails} cropType={cropType} />} />
-          <Route path="/soil-management" element={<SoilManagement location={locationDetails} cropType={cropType} />} />
-          <Route path="/irrigation-control" element={<IrrigationControl location={locationDetails} cropType={cropType} />} />
-          <Route path="/fertilizer-planner" element={<FertilizerPlanner location={locationDetails} cropType={cropType} />} />
-          <Route path="/yield-prediction" element={<YieldPrediction location={locationDetails} cropType={cropType} />} />
-          <Route path="/weather-insights" element={<WeatherInsights location={locationDetails} cropType={cropType} />} />
-          <Route path="/pest-control" element={<PestControl location={locationDetails} cropType={cropType} />} />
-          <Route path="/market-prices" element={<MarketPrices location={locationDetails} cropType={cropType} />} />
-          <Route path="/farm-equipment" element={<FarmEquipment location={locationDetails} cropType={cropType} />} />
-          <Route path="/labor-management" element={<LaborManagement location={locationDetails} cropType={cropType} />} />
-          <Route path="/financial-reports" element={<FinancialReports location={locationDetails} cropType={cropType} />} />
-          <Route path="/iot-sensors" element={<IoTSensors location={locationDetails} cropType={cropType} />} />
-          <Route path="/field-mapping" element={<FieldMapping location={locationDetails} cropType={cropType} />} />
-          <Route path="/sustainability" element={<Sustainability location={locationDetails} cropType={cropType} />} />
+          <Route path="/crop-analytics" element={<Layout activeItem="Crop Analytics"><CropAnalytics location={locationDetails} cropType={cropType} /></Layout>} />
+          <Route path="/soil-management" element={<Layout activeItem="Soil Management"><SoilManagement location={locationDetails} cropType={cropType} /></Layout>} />
+          <Route path="/irrigation-control" element={<Layout activeItem="Irrigation Control"><IrrigationControl location={locationDetails} cropType={cropType} /></Layout>} />
+          <Route path="/fertilizer-planner" element={<Layout activeItem="Fertilizer Planner"><FertilizerPlanner location={locationDetails} cropType={cropType} /></Layout>} />
+          <Route path="/yield-prediction" element={<Layout activeItem="Yield Prediction"><YieldPrediction location={locationDetails} cropType={cropType} /></Layout>} />
+          <Route path="/weather-insights" element={<Layout activeItem="Weather Insights"><WeatherInsights location={locationDetails} cropType={cropType} /></Layout>} />
+          <Route path="/pest-control" element={<Layout activeItem="Pest Control"><PestControl location={locationDetails} cropType={cropType} /></Layout>} />
+          <Route path="/market-prices" element={<Layout activeItem="Market Prices"><MarketPrices location={locationDetails} cropType={cropType} /></Layout>} />
+          <Route path="/farm-equipment" element={<Layout activeItem="Farm Equipment"><FarmEquipment location={locationDetails} cropType={cropType} /></Layout>} />
+          <Route path="/labor-management" element={<Layout activeItem="Labor Management"><LaborManagement location={locationDetails} cropType={cropType} /></Layout>} />
+          <Route path="/financial-reports" element={<Layout activeItem="Financial Reports"><FinancialReports location={locationDetails} cropType={cropType} /></Layout>} />
+          <Route path="/iot-sensors" element={<Layout activeItem="IoT Sensors"><IoTSensors location={locationDetails} cropType={cropType} /></Layout>} />
+          <Route path="/field-mapping" element={<Layout activeItem="Field Mapping"><FieldMapping location={locationDetails} cropType={cropType} /></Layout>} />
+          <Route path="/sustainability" element={<Layout activeItem="Sustainability"><Sustainability location={locationDetails} cropType={cropType} /></Layout>} />
           <Route
             path="/settings"
             element={
-              <Settings
-                location={locationDetails}
-                onSetLocation={handleSetUserLocation}
-                cropType={cropType}
-                onSetCropType={handleSetCropType}
-              />
+              <Layout activeItem="Settings">
+                <Settings
+                  location={locationDetails}
+                  onSetLocation={handleSetUserLocation}
+                  cropType={cropType}
+                  onSetCropType={handleSetCropType}
+                />
+              </Layout>
             }
           />
-          <Route path="/help-support" element={<HelpSupport location={locationDetails} cropType={cropType} />} />
+          <Route path="/help-support" element={<Layout activeItem="Help & Support"><HelpSupport location={locationDetails} cropType={cropType} /></Layout>} />
         </Routes>
       </Router>
     </ThemeProvider>
