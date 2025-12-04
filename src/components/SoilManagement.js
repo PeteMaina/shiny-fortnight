@@ -16,7 +16,7 @@ import {
   useTheme,
   useMediaQuery,
 } from '@mui/material';
-import { Grass, Science, Opacity, Eco, Spa } from '@mui/icons-material';
+import { Grass, Science, Opacity, Nature, Spa } from '@mui/icons-material';
 
 const cropNutrientsInfo = {
   corn: {
@@ -136,7 +136,7 @@ const SoilManagement = ({ location, cropType = 'default' }) => {
           <Card>
             <CardHeader
               title="Sustainability Tips"
-              avatar={<Eco />}
+              avatar={<Nature />}
             />
             <CardContent>
               <Typography variant="body2" sx={{ mb: 2 }}>
