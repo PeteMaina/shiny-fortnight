@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Box,
   Container,
@@ -73,6 +73,10 @@ import {
   ListItemText,
   Divider,
   IconButton,
+  Fade,
+  Zoom,
+  Slide,
+  Grow,
 } from '@mui/material';
 import {
   Agriculture,
@@ -232,6 +236,29 @@ const Dashboard = ({
   const [bottomNavValue, setBottomNavValue] = useState(0);
   const [ratingValue, setRatingValue] = useState(4);
   const [loading, setLoading] = useState(false);
+  const [weatherDialogOpen, setWeatherDialogOpen] = useState(false);
+  const [equipmentDialogOpen, setEquipmentDialogOpen] = useState(false);
+  const [laborDialogOpen, setLaborDialogOpen] = useState(false);
+  const [sustainabilityScore, setSustainabilityScore] = useState(85);
+  const [realTimeData, setRealTimeData] = useState({
+    temperature: 24,
+    humidity: 65,
+    soilMoisture: 78,
+    lightLevel: 85
+  });
+
+  // Simulate real-time data updates
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setRealTimeData(prev => ({
+        temperature: prev.temperature + (Math.random() - 0.5) * 2,
+        humidity: prev.humidity + (Math.random() - 0.5) * 5,
+        soilMoisture: prev.soilMoisture + (Math.random() - 0.5) * 3,
+        lightLevel: prev.lightLevel + (Math.random() - 0.5) * 4
+      }));
+    }, 5000);
+    return () => clearInterval(interval);
+  }, []);
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
@@ -317,6 +344,34 @@ const Dashboard = ({
     { name: 'Soybeans', yield: 2100, area: 35, status: 'Good', profit: 13100 },
   ];
 
+  const weatherForecast = [
+    { day: 'Today', temp: '24°C', condition: 'Sunny', icon: <WbSunny />, precipitation: '0%' },
+    { day: 'Tomorrow', temp: '22°C', condition: 'Cloudy', icon: <Cloud />, precipitation: '20%' },
+    { day: 'Wednesday', temp: '26°C', condition: 'Rainy', icon: <Opacity />, precipitation: '80%' },
+    { day: 'Thursday', temp: '28°C', condition: 'Sunny', icon: <WbSunny />, precipitation: '10%' },
+  ];
+
+  const equipmentStatus = [
+    { name: 'Tractor A1', status: 'Active', battery: 85, location: 'Field 2', lastMaintenance: '2 days ago' },
+    { name: 'Irrigation Pump', status: 'Idle', battery: 92, location: 'Station 1', lastMaintenance: '1 week ago' },
+    { name: 'Soil Sensor Hub', status: 'Active', battery: 78, location: 'Field 1', lastMaintenance: '3 days ago' },
+    { name: 'Weather Station', status: 'Active', battery: 95, location: 'Central', lastMaintenance: '1 day ago' },
+  ];
+
+  const laborSchedule = [
+    { name: 'John Smith', role: 'Farm Manager', shift: '8AM-5PM', status: 'On Duty', tasks: ['Field inspection', 'Equipment check'] },
+    { name: 'Maria Garcia', role: 'Irrigation Tech', shift: '6AM-2PM', status: 'On Duty', tasks: ['System monitoring', 'Maintenance'] },
+    { name: 'David Chen', role: 'Harvest Worker', shift: '7AM-4PM', status: 'Break', tasks: ['Corn harvesting', 'Quality check'] },
+    { name: 'Sarah Johnson', role: 'Soil Analyst', shift: '9AM-6PM', status: 'Off Duty', tasks: ['Sample collection', 'Lab analysis'] },
+  ];
+
+  const sustainabilityMetrics = [
+    { metric: 'Carbon Footprint', value: '2.3 tons CO2', change: '-8%', status: 'improving' },
+    { metric: 'Water Efficiency', value: '85%', change: '+5%', status: 'excellent' },
+    { metric: 'Soil Health Score', value: '92/100', change: '+3%', status: 'good' },
+    { metric: 'Energy Usage', value: '1,240 kWh', change: '-12%', status: 'improving' },
+  ];
+
   const speedDialActions = [
     { icon: <Add />, name: 'Add Field' },
     { icon: <CameraAlt />, name: 'Take Photo' },
@@ -326,312 +381,74 @@ const Dashboard = ({
 
   return (
     <Container maxWidth="xl">
-          {/* Welcome Section */}
-          <Box sx={{ mb: 4 }}>
-            <Typography variant="h4" gutterBottom sx={{ fontWeight: 'bold', color: 'primary.main' }}>
-              Welcome back, Farmer!
-            </Typography>
-            <Typography variant="body1" color="text.secondary">
-              Here's what's happening on your farm today.
-            </Typography>
+      {/* Welcome Section */}
+      <Fade in timeout={1000}>
+        <Box sx={{ mb: 4 }}>
+          <Typography variant="h4" gutterBottom sx={{ fontWeight: 'bold', color: 'primary.main' }}>
+            Welcome back, Farmer!
+          </Typography>
+          <Typography variant="body1" color="text.secondary">
+            Here's what's happening on your farm today. Last updated: {new Date().toLocaleTimeString()}
+          </Typography>
 
-            {/* Crop Type Selector */}
-            <Box sx={{ mt: 2, width: 250 }}>
-              <FormControl fullWidth>
-                <InputLabel id="crop-type-label">Select Crop Type</InputLabel>
-                <Select
-                  labelId="crop-type-label"
-                  value={cropType}
-                  label="Select Crop Type"
-                  onChange={handleCropTypeChange}
-                >
-                  <MenuItem value="corn">Corn</MenuItem>
-                  <MenuItem value="wheat">Wheat</MenuItem>
-                  <MenuItem value="tomatoes">Tomatoes</MenuItem>
-                  <MenuItem value="soybeans">Soybeans</MenuItem>
-                </Select>
-              </FormControl>
-            </Box>
-
-            {/* Location Input */}
-            <Box sx={{ mt: 2, width: 250 }}>
-              <TextField
-                label="Set Location"
-                value={location || ''}
-                placeholder="Enter location"
-                onChange={handleLocationChange}
-                fullWidth
-                size="small"
-              />
-            </Box>
+          {/* Crop Type Selector */}
+          <Box sx={{ mt: 2, width: 250 }}>
+            <FormControl fullWidth>
+              <InputLabel id="crop-type-label">Select Crop Type</InputLabel>
+              <Select
+                labelId="crop-type-label"
+                value={cropType}
+                label="Select Crop Type"
+                onChange={handleCropTypeChange}
+              >
+                <MenuItem value="corn">Corn</MenuItem>
+                <MenuItem value="wheat">Wheat</MenuItem>
+                <MenuItem value="tomatoes">Tomatoes</MenuItem>
+                <MenuItem value="soybeans">Soybeans</MenuItem>
+              </Select>
+            </FormControl>
           </Box>
 
-          {/* Quick Stats */}
-          <Grid container spacing={3} sx={{ mb: 4 }}>
-            {quickStats.map((stat, index) => (
-              <Grid item xs={12} sm={6} md={3} key={index}>
-                <Card sx={{ borderRadius: 3, boxShadow: '0 4px 20px rgba(0,0,0,0.08)' }}>
-                  <CardContent sx={{ p: 3 }}>
-                    <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ mb: 2 }}>
-                      <Avatar sx={{ bgcolor: `${stat.color}.main`, width: 48, height: 48 }}>
-                        {stat.icon}
-                      </Avatar>
-                      <Chip
-                        label={stat.change}
-                        color={stat.change.startsWith('+') ? 'success' : stat.change.startsWith('-') ? 'error' : 'default'}
-                        size="small"
-                        sx={{ borderRadius: 2 }}
-                      />
-                    </Stack>
-                    <Typography variant="h4" sx={{ fontWeight: 'bold', mb: 1 }}>
-                      {stat.value}
-                    </Typography>
-                    <Typography variant="body2" color="text.secondary">
-                      {stat.title}
-                    </Typography>
-                  </CardContent>
-                </Card>
-              </Grid>
-            ))}
+          {/* Location Input */}
+          <Box sx={{ mt: 2, width: 250 }}>
+            <TextField
+              label="Set Location"
+              value={location || ''}
+              placeholder="Enter location"
+              onChange={handleLocationChange}
+              fullWidth
+              size="small"
+            />
+          </Box>
+        </Box>
+      </Fade>
+
+      {/* Real-time Environmental Data */}
+      <Grid container spacing={2} sx={{ mb: 4 }}>
+        {[
+          { label: 'Temperature', value: `${realTimeData.temperature.toFixed(1)}°C`, icon: <WbSunny />, color: 'warning' },
+          { label: 'Humidity', value: `${realTimeData.humidity.toFixed(0)}%`, icon: <Opacity />, color: 'info' },
+          { label: 'Soil Moisture', value: `${realTimeData.soilMoisture.toFixed(0)}%`, icon: <Grass />, color: 'success' },
+          { label: 'Light Level', value: `${realTimeData.lightLevel.toFixed(0)}%`, icon: <Brightness6 />, color: 'primary' }
+].map((sensor, index) => (
+          <Grid item xs={12} sm={6} md={3} key={index}>
+            <Card>
+              <CardContent>
+                <Box display="flex" alignItems="center" mb={1}>
+                  <Avatar sx={{ bgcolor: `${sensor.color}.main`, mr: 1 }}>
+                    {sensor.icon}
+                  </Avatar>
+                  <Typography variant="h6">{sensor.label}</Typography>
+                </Box>
+                <Typography variant="h4" color={`${sensor.color}.main`}>
+                  {sensor.value}
+                </Typography>
+              </CardContent>
+            </Card>
           </Grid>
-
-          {/* Tabs Section */}
-          <Box sx={{ mb: 4 }}>
-            <Tabs value={tabValue} onChange={handleTabChange} aria-label="dashboard tabs">
-              <Tab label="Overview" />
-              <Tab label="Analytics" />
-              <Tab label="Controls" />
-              <Tab label="Reports" />
-            </Tabs>
-          </Box>
-
-          {/* Tab Content */}
-          {tabValue === 0 && (
-            <Grid container spacing={3}>
-              {/* Alerts Panel */}
-              <Grid item xs={12} lg={8}>
-                <Card sx={{ borderRadius: 3, boxShadow: '0 4px 20px rgba(0,0,0,0.08)' }}>
-                  <CardHeader
-                    title="Farm Alerts & Notifications"
-                    titleTypographyProps={{ variant: 'h6', fontWeight: 'bold' }}
-                    action={
-                      <Button variant="outlined" size="small" sx={{ borderRadius: 2 }}>
-                        View All
-                      </Button>
-                    }
-                  />
-                  <CardContent sx={{ p: 0 }}>
-                    <List>
-                      {alerts.map((alert, index) => (
-                        <React.Fragment key={index}>
-                          <ListItem sx={{ py: 2, px: 3 }}>
-                            <ListItemIcon>
-                              {alert.type === 'warning' && <Warning color="warning" />}
-                              {alert.type === 'error' && <Error color="error" />}
-                              {alert.type === 'info' && <Info color="info" />}
-                              {alert.type === 'success' && <CheckCircle color="success" />}
-                            </ListItemIcon>
-                            <ListItemText
-                              primary={
-                                <Typography variant="subtitle2" sx={{ fontWeight: 'bold' }}>
-                                  {alert.title}
-                                </Typography>
-                              }
-                              secondary={
-                                <Stack direction="row" justifyContent="space-between" alignItems="center">
-                                  <Typography variant="body2" color="text.secondary">
-                                    {alert.message}
-                                  </Typography>
-                                  <Typography variant="caption" color="text.secondary">
-                                    {alert.time}
-                                  </Typography>
-                                </Stack>
-                              }
-                            />
-                          </ListItem>
-                          {index < alerts.length - 1 && <Divider />}
-                        </React.Fragment>
-                      ))}
-                    </List>
-                  </CardContent>
-                </Card>
-              </Grid>
-
-              {/* AI Recommendations */}
-              <Grid item xs={12} lg={4}>
-                <Card sx={{ borderRadius: 3, boxShadow: '0 4px 20px rgba(0,0,0,0.08)' }}>
-                  <CardHeader title="AI Recommendations" titleTypographyProps={{ variant: 'h6', fontWeight: 'bold' }} />
-                  <CardContent>
-                    <Stack spacing={2}>
-                      {recommendations.map((rec, index) => (
-                        <Box key={index} sx={{ p: 2, border: 1, borderColor: 'divider', borderRadius: 2 }}>
-                          <Stack direction="row" justifyContent="space-between" alignItems="flex-start" sx={{ mb: 1 }}>
-                            <Typography variant="subtitle2" sx={{ fontWeight: 'bold' }}>
-                              {rec.title}
-                            </Typography>
-                            <Chip
-                              label={rec.priority}
-                              size="small"
-                              color={rec.priority === 'high' ? 'error' : rec.priority === 'medium' ? 'warning' : 'default'}
-                            />
-                          </Stack>
-                          <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-                            {rec.description}
-                          </Typography>
-                          <Button variant="contained" size="small" sx={{ borderRadius: 2 }}>
-                            {rec.action}
-                          </Button>
-                        </Box>
-                      ))}
-                    </Stack>
-                  </CardContent>
-                </Card>
-              </Grid>
-
-              {/* Charts and Analytics */}
-              <Grid item xs={12} md={6}>
-                <Card sx={{ borderRadius: 3, boxShadow: '0 4px 20px rgba(0,0,0,0.08)' }}>
-                  <CardHeader
-                    title="Yield Trends"
-                    titleTypographyProps={{ variant: 'h6', fontWeight: 'bold' }}
-                    action={<IconButton><BarChart /></IconButton>}
-                  />
-                  <CardContent>
-                    <Box sx={{ height: 200, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                      <Typography variant="body1" color="text.secondary">
-                        Interactive Chart Component
-                      </Typography>
-                    </Box>
-                  </CardContent>
-                </Card>
-              </Grid>
-
-              <Grid item xs={12} md={6}>
-                <Card sx={{ borderRadius: 3, boxShadow: '0 4px 20px rgba(0,0,0,0.08)' }}>
-                  <CardHeader
-                    title="Resource Usage"
-                    titleTypographyProps={{ variant: 'h6', fontWeight: 'bold' }}
-                    action={<IconButton><PieChart /></IconButton>}
-                  />
-                  <CardContent>
-                    <Box sx={{ height: 200, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                      <Typography variant="body1" color="text.secondary">
-                        Resource Usage Chart
-                      </Typography>
-                    </Box>
-                  </CardContent>
-                </Card>
-              </Grid>
-            </Grid>
-          )}
-
-          {tabValue === 1 && (
-            <Grid container spacing={3}>
-              {/* Crop Performance Table */}
-              <Grid item xs={12}>
-                <Card sx={{ borderRadius: 3, boxShadow: '0 4px 20px rgba(0,0,0,0.08)' }}>
-                  <CardHeader
-                    title="Crop Performance Analytics"
-                    titleTypographyProps={{ variant: 'h6', fontWeight: 'bold' }}
-                    action={
-                      <Stack direction="row" spacing={1}>
-                        <Button variant="outlined" startIcon={<Download />} size="small">
-                          Export PDF
-                        </Button>
-                        <Button variant="outlined" startIcon={<Upload />} size="small">
-                          Import Data
-                        </Button>
-                      </Stack>
-                    }
-                  />
-                  <CardContent>
-                    <Typography variant="body1" color="text.secondary">
-                      Farm reports and analytics content will be displayed here.
-                    </Typography>
-                    <Box sx={{ mt: 2 }}>
-                      <Pagination count={10} color="primary" />
-                    </Box>
-                  </CardContent>
-                </Card>
-              </Grid>
-            </Grid>
-          )}
-
-          {/* Floating Action Button */}
-          <Fab
-            color="primary"
-            aria-label="add"
-            sx={{ position: 'fixed', bottom: 16, right: 16 }}
-            onClick={() => setDialogOpen(true)}
-          >
-            <Add />
-          </Fab>
-
-          {/* Speed Dial */}
-          <SpeedDial
-            ariaLabel="SpeedDial basic example"
-            sx={{ position: 'fixed', bottom: 16, right: 80 }}
-            icon={<SpeedDialIcon />}
-          >
-            {speedDialActions.map((action) => (
-              <SpeedDialAction
-                key={action.name}
-                icon={action.icon}
-                tooltipTitle={action.name}
-              />
-            ))}
-          </SpeedDial>
-
-          {/* Bottom Navigation for Mobile */}
-          {isMobile && (
-            <BottomNavigation
-              value={bottomNavValue}
-              onChange={(event, newValue) => {
-                setBottomNavValue(newValue);
-              }}
-              showLabels
-              sx={{ position: 'fixed', bottom: 0, left: 0, right: 0 }}
-            >
-              <BottomNavigationAction label="Home" icon={<DashboardIcon />} />
-              <BottomNavigationAction label="Analytics" icon={<Analytics />} />
-              <BottomNavigationAction label="Controls" icon={<Settings />} />
-              <BottomNavigationAction label="Reports" icon={<Assessment />} />
-            </BottomNavigation>
-          )}
-
-          {/* Dialog */}
-          <Dialog open={dialogOpen} onClose={() => setDialogOpen(false)}>
-            <DialogTitle>Add New Item</DialogTitle>
-            <DialogContent>
-              <Typography variant="body1">
-                Add new item dialog content here.
-              </Typography>
-            </DialogContent>
-            <DialogActions>
-              <Button onClick={() => setDialogOpen(false)}>Cancel</Button>
-              <Button onClick={() => setDialogOpen(false)}>Add</Button>
-            </DialogActions>
-          </Dialog>
-
-          {/* Snackbar */}
-          <Snackbar
-            open={snackbarOpen}
-            autoHideDuration={6000}
-            onClose={handleSnackbarClose}
-          >
-            <Alert onClose={handleSnackbarClose} severity="success" sx={{ width: '100%' }}>
-              Action completed successfully!
-            </Alert>
-          </Snackbar>
-
-          {/* Loading Backdrop */}
-          <Backdrop
-            sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
-            open={loading}
-          >
-            <CircularProgress color="inherit" />
-          </Backdrop>
-        </Container>
+        )) }
+      </Grid>
+    </Container>
   );
 };
 
