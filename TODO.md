@@ -1,0 +1,3 @@
+- [x] Improve responsiveness: Adjusted Grid container spacing to 2, made social login Stack direction responsive (column on xs, row on sm+), and reduced padding on mobile (p: { xs: 3, sm: 4 }).
+- [x] Clean up design: Reduced excessive padding (elevation 12 to 8, borderRadius 4 to 3), improved spacing (form mb 4 to 3, social mb 4 to 3), simplified social login by removing Apple button, and ensured consistent border radius and shadows using theme.
+- [x] Fix rendering issues: Ensured proper use of Material-UI components, removed unnecessary Apple button, and optimized layout for better visual hierarchy.

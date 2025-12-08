@@ -106,10 +106,10 @@ const AuthPage: React.FC = () => {
     >
       <Container maxWidth="sm">
         <Paper
-          elevation={12}
+          elevation={8}
           sx={{
-            p: 6,
-            borderRadius: 4,
+            p: { xs: 3, sm: 4 },
+            borderRadius: 3,
             background: 'rgba(255,255,255,0.95)',
             backdropFilter: 'blur(10px)',
           }}
@@ -126,8 +126,8 @@ const AuthPage: React.FC = () => {
             </Typography>
           </Box>
 
-          <Box component="form" onSubmit={handleSubmit} sx={{ mb: 4 }}>
-            <Grid container spacing={3}>
+          <Box component="form" onSubmit={handleSubmit} sx={{ mb: 3 }}>
+            <Grid container spacing={2}>
               {isSignUp && (
                 <>
                   <Grid item xs={12} sm={6}>
@@ -300,7 +300,7 @@ const AuthPage: React.FC = () => {
             </Typography>
           </Divider>
 
-          <Stack direction="row" spacing={2} sx={{ mb: 4 }}>
+          <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2} sx={{ mb: 3 }}>
             <Button
               fullWidth
               variant="outlined"
@@ -318,15 +318,6 @@ const AuthPage: React.FC = () => {
               sx={{ borderRadius: 3 }}
             >
               Facebook
-            </Button>
-            <Button
-              fullWidth
-              variant="outlined"
-              startIcon={<Apple />}
-              onClick={() => handleSocialLogin('Apple')}
-              sx={{ borderRadius: 3 }}
-            >
-              Apple
             </Button>
           </Stack>
 
