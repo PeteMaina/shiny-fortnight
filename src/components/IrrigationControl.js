@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Typography,
   Container,
@@ -17,8 +17,11 @@ import {
   MenuItem,
   FormControl,
   InputLabel,
+  Alert,
+  CircularProgress,
+  Chip,
 } from '@mui/material';
-import { Opacity as WaterDrop, PlayArrow, Stop, Schedule } from '@mui/icons-material';
+import { Opacity as WaterDrop, PlayArrow, Stop, Schedule, Cloud, WbSunny, Warning } from '@mui/icons-material';
 
 const irrigationSystemsInfo = {
   drip: {
@@ -44,8 +47,58 @@ const IrrigationControl = ({ location, cropType = 'default' }) => {
   const isSmDown = useMediaQuery(theme.breakpoints.down('sm'));
   const [autoIrrigation, setAutoIrrigation] = useState(true);
   const [selectedSystem, setSelectedSystem] = useState('drip');
+  const [weatherData, setWeatherData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  // Fetch weather data for irrigation recommendations
+  useEffect(() => {
+    const fetchWeatherData = async () => {
+      try {
+        setLoading(true);
+        const lat = location?.lat || 40.7128;
+        const lon = location?.lon || -74.0060;
+
+        const response = await fetch(`http://localhost:5000/api/weather?lat=${lat}&lon=${lon}`);
+        if (!response.ok) {
+          throw new Error('Failed to fetch weather data');
+        }
+        const data = await response.json();
+        setWeatherData(data);
+        setError(null);
+      } catch (err) {
+        setError(err.message);
+        console.error('Error fetching weather data:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchWeatherData();
+  }, [location]);
 
   const systemInfo = irrigationSystemsInfo[selectedSystem] || irrigationSystemsInfo.default;
+
+  // Calculate irrigation recommendations based on weather
+  const getIrrigationRecommendation = () => {
+    if (!weatherData) return null;
+
+    const { temperature, humidity, precipitation, forecast } = weatherData;
+    const nextDayPrecipitation = forecast?.[1]?.precipitation || 0;
+
+    // Simple logic for irrigation recommendations
+    if (nextDayPrecipitation > 50) {
+      return { level: 'low', message: 'Heavy rain expected tomorrow - reduce irrigation', color: 'info' };
+    } else if (humidity > 80) {
+      return { level: 'low', message: 'High humidity detected - minimal watering needed', color: 'success' };
+    } else if (temperature > 30) {
+      return { level: 'high', message: 'Hot weather - increase irrigation frequency', color: 'warning' };
+    } else {
+      return { level: 'normal', message: 'Normal conditions - maintain regular schedule', color: 'primary' };
+    }
+  };
+
+  const recommendation = getIrrigationRecommendation();
 
   return (
     <Container maxWidth="xl" sx={{ pb: 4 }}>

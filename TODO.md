@@ -22,13 +22,19 @@ Create a backend and its weather API comes from google deepmind's WeatherNext2
 - [x] Update Dashboard component to use real weather data for temperature and humidity
 - [x] Integrate weather data into real-time environmental sensors
 - [x] Update weather forecast display in Dashboard
+- [x] Integrate weather data into IrrigationControl component for smart irrigation recommendations
+- [x] Add weather-based irrigation logic (reduce watering for rain, increase for heat)
+- [x] Integrate weather data into YieldPrediction component for dynamic yield forecasting
+- [x] Add weather impact calculations for temperature, humidity, and precipitation effects on crop yields
+- [x] Update yield confidence levels based on weather conditions
 
 ### Next Steps
 - [ ] Install Node.js and npm on the system
 - [ ] Run `npm install` in backend directory
 - [ ] Start backend server with `npm start`
-- [ ] Test weather data fetching in WeatherInsights and Dashboard components
+- [ ] Test weather data fetching in all components (WeatherInsights, Dashboard, IrrigationControl, YieldPrediction)
 - [ ] Integrate actual Google DeepMind WeatherNext2 API (requires API key and access)
 - [ ] Add location-based weather data using coordinates from locationUtils
 - [ ] Implement weather alerts and notifications based on forecast data
 - [ ] Add weather data caching for better performance
+- [ ] Consider integrating weather data into other components (CropAnalytics, PestControl, etc.)
