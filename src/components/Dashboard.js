@@ -246,13 +246,38 @@ const Dashboard = ({
     soilMoisture: 78,
     lightLevel: 85
   });
+  const [weatherData, setWeatherData] = useState(null);
 
-  // Simulate real-time data updates
+  // Fetch weather data
+  useEffect(() => {
+    const fetchWeatherData = async () => {
+      try {
+        const lat = location?.lat || 40.7128;
+        const lon = location?.lon || -74.0060;
+        const response = await fetch(`http://localhost:5000/api/weather?lat=${lat}&lon=${lon}`);
+        if (response.ok) {
+          const data = await response.json();
+          setWeatherData(data);
+          // Update realTimeData with actual weather data
+          setRealTimeData(prev => ({
+            ...prev,
+            temperature: data.temperature,
+            humidity: data.humidity
+          }));
+        }
+      } catch (error) {
+        console.error('Error fetching weather data:', error);
+      }
+    };
+
+    fetchWeatherData();
+  }, [location]);
+
+  // Simulate real-time data updates for non-weather sensors
   useEffect(() => {
     const interval = setInterval(() => {
       setRealTimeData(prev => ({
-        temperature: prev.temperature + (Math.random() - 0.5) * 2,
-        humidity: prev.humidity + (Math.random() - 0.5) * 5,
+        ...prev,
         soilMoisture: prev.soilMoisture + (Math.random() - 0.5) * 3,
         lightLevel: prev.lightLevel + (Math.random() - 0.5) * 4
       }));
@@ -344,7 +369,13 @@ const Dashboard = ({
     { name: 'Soybeans', yield: 2100, area: 35, status: 'Good', profit: 13100 },
   ];
 
-  const weatherForecast = [
+  const weatherForecast = weatherData?.forecast?.map((day, index) => ({
+    day: day.day,
+    temp: `${day.temp}°C`,
+    condition: day.condition,
+    icon: index === 0 ? <WbSunny /> : index === 1 ? <Cloud /> : index === 2 ? <Opacity /> : <WbSunny />,
+    precipitation: `${day.precipitation}%`
+  })) || [
     { day: 'Today', temp: '24°C', condition: 'Sunny', icon: <WbSunny />, precipitation: '0%' },
     { day: 'Tomorrow', temp: '22°C', condition: 'Cloudy', icon: <Cloud />, precipitation: '20%' },
     { day: 'Wednesday', temp: '26°C', condition: 'Rainy', icon: <Opacity />, precipitation: '80%' },
