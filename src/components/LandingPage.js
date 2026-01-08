@@ -13,7 +13,6 @@ import {
   useScrollTrigger,
   Slide,
   useTheme,
-  Alpha,
   Avatar,
   Rating
 } from '@mui/material';
@@ -182,8 +181,7 @@ const LandingPage = () => {
               >
                 <Box
                   component="img"
-                  src="/agriai_dashboard_hero_1767884945763.png" // Using the generated image path (assuming correct) - CHECKPATH
-                  // Fallback if generic
+                  src="/hero.png"
                   onError={(e) => { e.target.src = 'https://via.placeholder.com/800x600/2E7D32/FFFFFF?text=AgriAI+Dashboard' }}
                   alt="AgriAI Dashboard"
                   sx={{

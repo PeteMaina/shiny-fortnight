@@ -16,6 +16,7 @@ import {
   Checkbox,
   Stack,
   Alert,
+  useTheme
 } from '@mui/material';
 import {
   Email,
@@ -25,13 +26,13 @@ import {
   VisibilityOff,
   Google,
   Facebook,
-  Apple,
   Agriculture,
 } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 
-const AuthPage: React.FC = () => {
+const AuthPage = () => {
   const navigate = useNavigate();
+  const theme = useTheme();
   const [isSignUp, setIsSignUp] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
@@ -46,7 +47,7 @@ const AuthPage: React.FC = () => {
   });
   const [errors, setErrors] = useState({});
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleInputChange = (e) => {
     const { name, value, checked } = e.target;
     setFormData(prev => ({
       ...prev,
@@ -58,7 +59,7 @@ const AuthPage: React.FC = () => {
   };
 
   const validateForm = () => {
-    const newErrors: Record<string, string> = {};
+    const newErrors = {};
 
     if (!formData.email) newErrors.email = 'Email is required';
     else if (!/\S+@\S+\.\S+/.test(formData.email)) newErrors.email = 'Email is invalid';
@@ -79,7 +80,7 @@ const AuthPage: React.FC = () => {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     if (validateForm()) {
       // For now, just navigate to dashboard
@@ -87,7 +88,7 @@ const AuthPage: React.FC = () => {
     }
   };
 
-  const handleSocialLogin = (provider: string) => {
+  const handleSocialLogin = (provider) => {
     // Simulate social login
     console.log(`Logging in with ${provider}`);
     navigate('/dashboard');
@@ -100,29 +101,29 @@ const AuthPage: React.FC = () => {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        background: 'linear-gradient(135deg, #E8F5E8 0%, #F1F8E9 100%)',
+        background: `linear-gradient(135deg, ${theme.palette.background.default} 0%, #E8F5E9 100%)`, // Matching LandingPage
         py: 4,
       }}
     >
       <Container maxWidth="sm">
         <Paper
-          elevation={8}
+          elevation={4}
           sx={{
-            p: { xs: 3, sm: 4 },
-            borderRadius: 3,
+            p: { xs: 3, sm: 5 },
+            borderRadius: 4,
             background: 'rgba(255,255,255,0.95)',
             backdropFilter: 'blur(10px)',
           }}
         >
           <Box sx={{ textAlign: 'center', mb: 4 }}>
-            <Avatar sx={{ bgcolor: 'primary.main', width: 80, height: 80, mx: 'auto', mb: 2 }}>
-              <Agriculture sx={{ fontSize: 40 }} />
+            <Avatar sx={{ bgcolor: 'primary.main', width: 64, height: 64, mx: 'auto', mb: 2, boxShadow: 3 }}>
+              <Agriculture sx={{ fontSize: 32 }} />
             </Avatar>
-            <Typography variant="h4" gutterBottom sx={{ color: 'primary.main', fontWeight: 'bold' }}>
-              Welcome to AgriAI
+            <Typography variant="h4" gutterBottom sx={{ fontWeight: 800, color: 'primary.main' }}>
+              {isSignUp ? 'Join AgriAI' : 'Welcome Back'}
             </Typography>
             <Typography variant="body1" color="text.secondary">
-              {isSignUp ? 'Create your account to get started' : 'Sign in to your account'}
+              {isSignUp ? 'Create your account to start optimizing your farm' : 'Sign in to access your dashboard'}
             </Typography>
           </Box>
 
@@ -139,13 +140,7 @@ const AuthPage: React.FC = () => {
                       onChange={handleInputChange}
                       error={!!errors.firstName}
                       helperText={errors.firstName}
-                      InputProps={{
-                        startAdornment: (
-                          <InputAdornment position="start">
-                            <Person color="action" />
-                          </InputAdornment>
-                        ),
-                      }}
+                      variant="outlined"
                     />
                   </Grid>
                   <Grid item xs={12} sm={6}>
@@ -188,7 +183,7 @@ const AuthPage: React.FC = () => {
               <Grid item xs={12}>
                 <TextField
                   fullWidth
-                  label="Email"
+                  label="Email Address"
                   name="email"
                   type="email"
                   value={formData.email}
@@ -258,24 +253,23 @@ const AuthPage: React.FC = () => {
                         name="agreeToTerms"
                         checked={formData.agreeToTerms}
                         onChange={handleInputChange}
-                        color="primary"
                       />
                     }
                     label={
-                      <Typography variant="body2">
+                      <Typography variant="body2" color="text.secondary">
                         I agree to the{' '}
-                        <Link href="#" color="primary">
+                        <Link href="#" underline="hover">
                           Terms of Service
                         </Link>{' '}
                         and{' '}
-                        <Link href="#" color="primary">
+                        <Link href="#" underline="hover">
                           Privacy Policy
                         </Link>
                       </Typography>
                     }
                   />
                   {errors.agreeToTerms && (
-                    <Typography variant="caption" color="error">
+                    <Typography variant="caption" color="error" sx={{ display: 'block', mt: 0.5 }}>
                       {errors.agreeToTerms}
                     </Typography>
                   )}
@@ -288,25 +282,25 @@ const AuthPage: React.FC = () => {
               fullWidth
               variant="contained"
               size="large"
-              sx={{ mt: 3, mb: 2, borderRadius: 3, py: 1.5 }}
+              sx={{ mt: 4, mb: 2, height: 48, fontSize: '1.1rem' }}
             >
               {isSignUp ? 'Create Account' : 'Sign In'}
             </Button>
           </Box>
 
           <Divider sx={{ mb: 3 }}>
-            <Typography variant="body2" color="text.secondary">
+            <Typography variant="body2" color="text.secondary" sx={{ px: 1 }}>
               or continue with
             </Typography>
           </Divider>
 
-          <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2} sx={{ mb: 3 }}>
+          <Stack direction="row" spacing={2} sx={{ mb: 4 }}>
             <Button
               fullWidth
               variant="outlined"
               startIcon={<Google />}
               onClick={() => handleSocialLogin('Google')}
-              sx={{ borderRadius: 3 }}
+              sx={{ height: 44, color: 'text.primary', borderColor: 'divider' }}
             >
               Google
             </Button>
@@ -315,32 +309,24 @@ const AuthPage: React.FC = () => {
               variant="outlined"
               startIcon={<Facebook />}
               onClick={() => handleSocialLogin('Facebook')}
-              sx={{ borderRadius: 3 }}
+              sx={{ height: 44, color: 'text.primary', borderColor: 'divider' }}
             >
               Facebook
             </Button>
           </Stack>
 
           <Box sx={{ textAlign: 'center' }}>
-            <Typography variant="body2">
+            <Typography variant="body2" color="text.secondary">
               {isSignUp ? 'Already have an account?' : "Don't have an account?"}{' '}
               <Link
                 component="button"
-                variant="body2"
+                variant="subtitle2"
                 onClick={() => setIsSignUp(!isSignUp)}
-                sx={{ fontWeight: 'bold' }}
+                sx={{ ml: 0.5 }}
               >
                 {isSignUp ? 'Sign In' : 'Sign Up'}
               </Link>
             </Typography>
-          </Box>
-
-          <Box sx={{ mt: 3 }}>
-            <Alert severity="info" sx={{ borderRadius: 2 }}>
-              <Typography variant="body2">
-                For demo purposes, any email/password combination will work. No actual authentication is implemented.
-              </Typography>
-            </Alert>
           </Box>
         </Paper>
       </Container>
