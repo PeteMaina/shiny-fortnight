@@ -21,6 +21,9 @@ import {
   Badge,
   Switch,
   FormControlLabel,
+  useTheme,
+  useMediaQuery,
+  Tooltip
 } from '@mui/material';
 import {
   Agriculture,
@@ -30,14 +33,17 @@ import {
   Help,
   Logout,
   Search,
+  Dashboard as DashboardIcon,
 } from '@mui/icons-material';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import Sidebar from './Sidebar';
 
 const drawerWidth = 280;
 
 const Layout = ({ children, activeItem }) => {
   const navigate = useNavigate();
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const [mobileOpen, setMobileOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [menuAnchor, setMenuAnchor] = useState(null);
@@ -65,38 +71,48 @@ const Layout = ({ children, activeItem }) => {
   };
 
   return (
-    <Box sx={{ display: 'flex', minHeight: '100vh', backgroundColor: 'background.default' }}>
+    <Box sx={{ display: 'flex', minHeight: '100vh', bgcolor: 'background.default' }}>
       {/* App Bar */}
       <AppBar
         position="fixed"
+        color="inherit" // Use white background from theme
         sx={{
           width: { md: `calc(100% - ${drawerWidth}px)` },
           ml: { md: `${drawerWidth}px` },
-          backgroundColor: 'rgba(255,255,255,0.95)',
-          backdropFilter: 'blur(10px)',
-          color: 'text.primary',
-          boxShadow: '0 4px 20px rgba(0,0,0,0.08)',
+          borderBottom: '1px solid',
+          borderColor: 'divider',
+          zIndex: (theme) => theme.zIndex.drawer + 1,
         }}
       >
-        <Toolbar>
-          <IconButton
-            color="inherit"
-            aria-label="open drawer"
-            edge="start"
-            onClick={handleDrawerToggle}
-            sx={{ mr: 2, display: { md: 'none' } }}
-          >
-            <MenuIcon />
-          </IconButton>
+        <Toolbar sx={{ justifyContent: 'space-between' }}>
+          <Stack direction="row" alignItems="center" spacing={2}>
+            <IconButton
+              color="inherit"
+              aria-label="open drawer"
+              edge="start"
+              onClick={handleDrawerToggle}
+              sx={{ display: { md: 'none' } }}
+            >
+              <MenuIcon />
+            </IconButton>
 
-          <Breadcrumbs aria-label="breadcrumb" sx={{ flexGrow: 1 }}>
-            <Link underline="hover" color="inherit" href="#">
-              {activeItem}
-            </Link>
-            <Typography color="text.primary">Overview</Typography>
-          </Breadcrumbs>
+            <Breadcrumbs aria-label="breadcrumb" sx={{ display: { xs: 'none', sm: 'block' } }}>
+              <Link
+                underline="hover"
+                color="inherit"
+                href="/dashboard"
+                sx={{ display: 'flex', alignItems: 'center' }}
+              >
+                <DashboardIcon sx={{ mr: 0.5 }} fontSize="inherit" />
+                App
+              </Link>
+              <Typography color="text.primary" sx={{ fontWeight: 600 }}>
+                {activeItem}
+              </Typography>
+            </Breadcrumbs>
+          </Stack>
 
-          <Stack direction="row" spacing={1} alignItems="center">
+          <Stack direction="row" spacing={2} alignItems="center">
             <TextField
               size="small"
               placeholder="Search..."
@@ -105,101 +121,102 @@ const Layout = ({ children, activeItem }) => {
               InputProps={{
                 startAdornment: (
                   <InputAdornment position="start">
-                    <Search />
+                    <Search color="action" />
                   </InputAdornment>
                 ),
               }}
-              sx={{ mr: 2, minWidth: 200 }}
+              sx={{
+                width: { xs: 120, sm: 250 },
+                '& .MuiOutlinedInput-root': {
+                  borderRadius: 2,
+                  bgcolor: 'background.paper'
+                }
+              }}
             />
 
-            <IconButton color="inherit" onClick={handleMenuClick}>
-              <Badge badgeContent={4} color="error">
-                <Notifications />
-              </Badge>
-            </IconButton>
+            <Stack direction="row" spacing={1}>
+              <Tooltip title="Notifications">
+                <IconButton color="inherit" size="large">
+                  <Badge badgeContent={4} color="error">
+                    <Notifications />
+                  </Badge>
+                </IconButton>
+              </Tooltip>
+              <Tooltip title="Settings">
+                <IconButton color="inherit" onClick={handlePopoverClick} size="large">
+                  <Settings />
+                </IconButton>
+              </Tooltip>
+            </Stack>
 
-            <IconButton color="inherit" onClick={handlePopoverClick}>
-              <Settings />
-            </IconButton>
-
-            <Avatar sx={{ bgcolor: 'primary.main', width: 32, height: 32 }}>
-              <Agriculture sx={{ fontSize: 18 }} />
+            <Avatar
+              sx={{
+                bgcolor: 'primary.main',
+                width: 40,
+                height: 40,
+                cursor: 'pointer',
+                boxShadow: 2
+              }}
+              onClick={handleMenuClick}
+            >
+              <Agriculture />
             </Avatar>
           </Stack>
         </Toolbar>
       </AppBar>
 
-      {/* Settings Menu */}
+      {/* User Menu */}
       <Menu
         anchorEl={menuAnchor}
         open={Boolean(menuAnchor)}
         onClose={handleMenuClose}
+        transformOrigin={{ horizontal: 'right', vertical: 'top' }}
+        anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
+        PaperProps={{
+          elevation: 0,
+          sx: {
+            overflow: 'visible',
+            filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
+            mt: 1.5,
+          }
+        }}
       >
         <MenuItem onClick={handleMenuClose}>
-          <ListItemIcon>
-            <Settings fontSize="small" />
-          </ListItemIcon>
-          <ListItemText>Settings</ListItemText>
+          <ListItemIcon><Settings fontSize="small" /></ListItemIcon>
+          Profile
         </MenuItem>
         <MenuItem onClick={handleMenuClose}>
-          <ListItemIcon>
-            <Help fontSize="small" />
-          </ListItemIcon>
-          <ListItemText>Help</ListItemText>
+          <ListItemIcon><Help fontSize="small" /></ListItemIcon>
+          Help Center
         </MenuItem>
         <MenuItem onClick={() => { handleMenuClose(); navigate('/'); }}>
-          <ListItemIcon>
-            <Logout fontSize="small" />
-          </ListItemIcon>
-          <ListItemText>Logout</ListItemText>
+          <ListItemIcon><Logout fontSize="small" /></ListItemIcon>
+          Logout
         </MenuItem>
       </Menu>
 
-      {/* Notifications Popover */}
+      {/* Settings Popover */}
       <Popover
         open={Boolean(popoverAnchor)}
         anchorEl={popoverAnchor}
         onClose={handlePopoverClose}
-        anchorOrigin={{
-          vertical: 'bottom',
-          horizontal: 'center',
-        }}
-        transformOrigin={{
-          vertical: 'top',
-          horizontal: 'center',
-        }}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+        transformOrigin={{ vertical: 'top', horizontal: 'center' }}
       >
-        <Box sx={{ p: 2, minWidth: 300 }}>
-          <Typography variant="h6" gutterBottom>
-            Quick Settings
-          </Typography>
-          <Stack spacing={2}>
+        <Box sx={{ p: 2, minWidth: 250 }}>
+          <Typography variant="h6" gutterBottom>Quick Settings</Typography>
+          <Stack spacing={1}>
             <FormControlLabel
-              control={
-                <Switch
-                  checked={autoIrrigation}
-                  onChange={(e) => setAutoIrrigation(e.target.checked)}
-                />
-              }
+              control={<Switch checked={autoIrrigation} onChange={(e) => setAutoIrrigation(e.target.checked)} />}
               label="Auto Irrigation"
             />
-            <FormControlLabel
-              control={
-                <Switch defaultChecked />
-              }
-              label="Weather Alerts"
-            />
-            <FormControlLabel
-              control={
-                <Switch defaultChecked />
-              }
-              label="Pest Notifications"
-            />
+            <FormControlLabel control={<Switch defaultChecked />} label="Weather Alerts" />
+            <FormControlLabel control={<Switch defaultChecked />} label="Pest Notifications" />
           </Stack>
         </Box>
       </Popover>
 
-      {/* Drawer */}
+      {/* Navigation Drawer */}
       <Box
         component="nav"
         sx={{ width: { md: drawerWidth }, flexShrink: { md: 0 } }}
@@ -211,12 +228,7 @@ const Layout = ({ children, activeItem }) => {
           ModalProps={{ keepMounted: true }}
           sx={{
             display: { xs: 'block', md: 'none' },
-            '& .MuiDrawer-paper': {
-              boxSizing: 'border-box',
-              width: drawerWidth,
-              border: 'none',
-              boxShadow: '4px 0 20px rgba(0,0,0,0.1)',
-            },
+            '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
           }}
         >
           <Sidebar activeItem={activeItem} />
@@ -225,12 +237,7 @@ const Layout = ({ children, activeItem }) => {
           variant="permanent"
           sx={{
             display: { xs: 'none', md: 'block' },
-            '& .MuiDrawer-paper': {
-              boxSizing: 'border-box',
-              width: drawerWidth,
-              border: 'none',
-              boxShadow: '4px 0 20px rgba(0,0,0,0.1)',
-            },
+            '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth, borderRight: '1px solid rgba(0,0,0,0.08)' },
           }}
           open
         >
@@ -238,18 +245,29 @@ const Layout = ({ children, activeItem }) => {
         </Drawer>
       </Box>
 
-      {/* Main Content */}
+      {/* Main Content Area */}
       <Box
         component="main"
         sx={{
           flexGrow: 1,
-          p: 3,
           width: { md: `calc(100% - ${drawerWidth}px)` },
-          mt: 8,
+          display: 'flex',
+          flexDirection: 'column',
         }}
       >
-        <Container maxWidth="xl">
-          {children}
+        <Toolbar /> {/* Spacer for AppBar */}
+        <Container
+          maxWidth="xl"
+          sx={{
+            py: 4,
+            flexGrow: 1,
+            display: 'flex',
+            flexDirection: 'column'
+          }}
+        >
+          <Box sx={{ minHeight: '100%' }}>
+            {children}
+          </Box>
         </Container>
       </Box>
     </Box>
