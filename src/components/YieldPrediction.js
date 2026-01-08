@@ -61,6 +61,21 @@ import Layout from './Layout';
 const YieldPrediction = () => {
   const [tabValue, setTabValue] = useState(0);
   const [loading, setLoading] = useState(false);
+  const [weatherData, setWeatherData] = useState(null);
+  const [cropType, setCropType] = useState('corn');
+
+  useEffect(() => {
+    const fetchWeather = async () => {
+      try {
+        const response = await fetch('http://localhost:5000/api/weather?lat=0&lon=0');
+        const data = await response.json();
+        setWeatherData(data);
+      } catch (error) {
+        console.error('Error fetching weather data:', error);
+      }
+    };
+    fetchWeather();
+  }, []);
 
   const handleTabChange = (event, newValue) => {
     setTabValue(newValue);
