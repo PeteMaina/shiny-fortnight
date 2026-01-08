@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import {
   Typography,
-  Container,
   Box,
   Grid,
   Card,
@@ -12,16 +11,17 @@ import {
   FormControlLabel,
   useTheme,
   useMediaQuery,
-  TextField,
   Select,
   MenuItem,
   FormControl,
   InputLabel,
   Alert,
-  CircularProgress,
-  Chip,
+  Avatar,
+  Divider,
+  Stack,
+  Chip
 } from '@mui/material';
-import { Opacity as WaterDrop, PlayArrow, Stop, Schedule, Cloud, WbSunny, Warning } from '@mui/icons-material';
+import { Opacity as WaterDrop, PlayArrow, Stop, WbSunny, Cloud, Thunderstorm } from '@mui/icons-material';
 
 const irrigationSystemsInfo = {
   drip: {
@@ -83,101 +83,158 @@ const IrrigationControl = ({ location, cropType = 'default' }) => {
   const getIrrigationRecommendation = () => {
     if (!weatherData) return null;
 
-    const { temperature, humidity, precipitation, forecast } = weatherData;
+    const { temperature, humidity, forecast } = weatherData;
     const nextDayPrecipitation = forecast?.[1]?.precipitation || 0;
 
-    // Simple logic for irrigation recommendations
     if (nextDayPrecipitation > 50) {
-      return { level: 'low', message: 'Heavy rain expected tomorrow - reduce irrigation', color: 'info' };
+      return { level: 'low', message: 'Heavy rain expected tomorrow - reduce irrigation', color: 'info', icon: <Thunderstorm /> };
     } else if (humidity > 80) {
-      return { level: 'low', message: 'High humidity detected - minimal watering needed', color: 'success' };
+      return { level: 'low', message: 'High humidity detected - minimal watering needed', color: 'success', icon: <Cloud /> };
     } else if (temperature > 30) {
-      return { level: 'high', message: 'Hot weather - increase irrigation frequency', color: 'warning' };
+      return { level: 'high', message: 'Hot weather - increase irrigation frequency', color: 'warning', icon: <WbSunny /> };
     } else {
-      return { level: 'normal', message: 'Normal conditions - maintain regular schedule', color: 'primary' };
+      return { level: 'normal', message: 'Normal conditions - maintain regular schedule', color: 'primary', icon: <WbSunny /> };
     }
   };
 
   const recommendation = getIrrigationRecommendation();
 
   return (
-    <Container maxWidth="xl" sx={{ pb: 4 }}>
-      <Box sx={{ mt: 4 }}>
-        <Typography variant={isSmDown ? 'h5' : 'h4'} gutterBottom>
+    <Box sx={{ pb: 4 }}>
+      <Box sx={{ mb: 4 }}>
+        <Typography variant="h4" gutterBottom fontWeight={700} color="primary.main">
           Irrigation Control
         </Typography>
-        <Typography variant="body1" sx={{ mb: 4 }}>
-          Manage and automate irrigation systems for {cropType} crops{location ? ` in ${location}` : ''}.
+        <Typography variant="body1" color="text.secondary">
+          Manage and automate irrigation systems for <strong>{cropType}</strong> crops{location ? ` in ${location}` : ''}.
         </Typography>
+      </Box>
 
-        <Grid container spacing={3}>
-          <Grid item xs={12} md={6}>
-            <Card>
-              <CardHeader
-                title="System Status"
-                avatar={<WaterDrop />}
-              />
-              <CardContent>
+      {recommendation && (
+        <Alert
+          severity={recommendation.color}
+          icon={recommendation.icon}
+          sx={{ mb: 4 }}
+          variant="filled"
+        >
+          <Typography variant="subtitle1" fontWeight={600}>
+            Recommendation: {recommendation.message}
+          </Typography>
+        </Alert>
+      )}
+
+      <Grid container spacing={3}>
+        <Grid item xs={12} md={7}>
+          <Card sx={{ height: '100%' }}>
+            <CardHeader
+              title="System Control"
+              avatar={<Avatar sx={{ bgcolor: 'primary.main' }}><WaterDrop sx={{ color: 'white' }} /></Avatar>}
+              action={
                 <FormControlLabel
                   control={
                     <Switch
                       checked={autoIrrigation}
                       onChange={(e) => setAutoIrrigation(e.target.checked)}
-                      inputProps={{ 'aria-label': 'Toggle Auto Irrigation' }}
+                      color="success"
                     />
                   }
-                  label="Auto Irrigation"
+                  label={<Typography variant="body2" fontWeight={600}>Auto Mode</Typography>}
                 />
-                <FormControl fullWidth sx={{ mt: 2 }}>
-                  <InputLabel id="irrigation-system-label">Irrigation System</InputLabel>
-                  <Select
-                    labelId="irrigation-system-label"
-                    value={selectedSystem}
-                    label="Irrigation System"
-                    onChange={(e) => setSelectedSystem(e.target.value)}
-                  >
-                    <MenuItem value="drip">Drip Irrigation</MenuItem>
-                    <MenuItem value="sprinkler">Sprinkler System</MenuItem>
-                    <MenuItem value="flood">Flood Irrigation</MenuItem>
-                  </Select>
-                </FormControl>
-                <Box sx={{ mt: 2 }}>
-                  <Typography variant="body2" color="text.secondary" gutterBottom>
-                    {systemInfo.description}
-                  </Typography>
-                  <Typography variant="caption" color="text.secondary">
-                    Suitable Regions: {systemInfo.suitableRegions.join(', ') || 'N/A'}
-                  </Typography>
-                </Box>
-                <Box sx={{ mt: 2 }}>
-                  <Button variant="contained" startIcon={<PlayArrow />} sx={{ mr: 1 }}>
-                    Start
-                  </Button>
-                  <Button variant="outlined" startIcon={<Stop />}>
-                    Stop
-                  </Button>
-                </Box>
-              </CardContent>
-            </Card>
-          </Grid>
+              }
+            />
+            <Divider />
+            <CardContent>
+              <FormControl fullWidth sx={{ mb: 3 }}>
+                <InputLabel id="irrigation-system-label">Irrigation System Type</InputLabel>
+                <Select
+                  labelId="irrigation-system-label"
+                  value={selectedSystem}
+                  label="Irrigation System Type"
+                  onChange={(e) => setSelectedSystem(e.target.value)}
+                >
+                  <MenuItem value="drip">Drip Irrigation</MenuItem>
+                  <MenuItem value="sprinkler">Sprinkler System</MenuItem>
+                  <MenuItem value="flood">Flood Irrigation</MenuItem>
+                </Select>
+              </FormControl>
 
-          <Grid item xs={12} md={6}>
-            <Card>
-              <CardHeader
-                title="Water Usage"
-                avatar={<WaterDrop />}
-              />
-              <CardContent>
-                <Typography variant="h6">Current Usage: 1,230 L</Typography>
-                <Typography variant="body2" color="text.secondary">
-                  Monitor water consumption and efficiency.
+              <Box sx={{ p: 2, bgcolor: 'grey.50', borderRadius: 2, mb: 3 }}>
+                <Typography variant="subtitle2" gutterBottom color="text.primary">
+                  System Description
                 </Typography>
-              </CardContent>
-            </Card>
-          </Grid>
+                <Typography variant="body2" color="text.secondary" paragraph>
+                  {systemInfo.description}
+                </Typography>
+                <Stack direction="row" spacing={1} alignItems="center">
+                  <Typography variant="caption" fontWeight={600}>Suitable Regions:</Typography>
+                  {systemInfo.suitableRegions.map(region => (
+                    <Chip key={region} label={region} size="small" />
+                  ))}
+                </Stack>
+              </Box>
+
+              <Stack direction="row" spacing={2}>
+                <Button
+                  variant="contained"
+                  color="success"
+                  startIcon={<PlayArrow />}
+                  size="large"
+                  disabled={autoIrrigation}
+                  fullWidth
+                >
+                  Start Cycle
+                </Button>
+                <Button
+                  variant="outlined"
+                  color="error"
+                  startIcon={<Stop />}
+                  size="large"
+                  disabled={autoIrrigation}
+                  fullWidth
+                >
+                  Stop Cycle
+                </Button>
+              </Stack>
+            </CardContent>
+          </Card>
         </Grid>
-      </Box>
-    </Container>
+
+        <Grid item xs={12} md={5}>
+          <Card sx={{ height: '100%' }}>
+            <CardHeader
+              title="Water Usage Stats"
+              avatar={<Avatar sx={{ bgcolor: 'info.main' }}><WaterDrop sx={{ color: 'white' }} /></Avatar>}
+            />
+            <Divider />
+            <CardContent>
+              <Box sx={{ textAlign: 'center', py: 2 }}>
+                <Typography variant="h3" fontWeight={700} color="primary">
+                  1,230 L
+                </Typography>
+                <Typography variant="subtitle2" color="text.secondary">
+                  Used Today
+                </Typography>
+              </Box>
+              <Divider sx={{ my: 2 }} />
+              <Stack spacing={2}>
+                <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                  <Typography variant="body2">Daily Average</Typography>
+                  <Typography variant="body2" fontWeight={600}>1,150 L</Typography>
+                </Box>
+                <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                  <Typography variant="body2">Efficiency Score</Typography>
+                  <Typography variant="body2" fontWeight={600} color="success.main">94%</Typography>
+                </Box>
+                <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                  <Typography variant="body2">Projected Monthly</Typography>
+                  <Typography variant="body2" fontWeight={600}>35,650 L</Typography>
+                </Box>
+              </Stack>
+            </CardContent>
+          </Card>
+        </Grid>
+      </Grid>
+    </Box>
   );
 };
 

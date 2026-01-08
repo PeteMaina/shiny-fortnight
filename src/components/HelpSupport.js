@@ -1,7 +1,6 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
   Typography,
-  Container,
   Box,
   Grid,
   Card,
@@ -11,400 +10,17 @@ import {
   Accordion,
   AccordionSummary,
   AccordionDetails,
-  TextField,
-  InputAdornment,
-  Tabs,
-  Tab,
   Avatar,
-  Chip,
-  Stack,
-  Paper,
-  IconButton,
-  Fab,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
-  List,
-  ListItem,
-  ListItemIcon,
-  ListItemText,
   Divider,
-  Tooltip,
-  Badge,
-  LinearProgress,
-  Alert,
-  AlertTitle,
-  Skeleton,
-  useTheme,
-  useMediaQuery,
 } from '@mui/material';
 import {
   Help,
   ContactSupport,
   Book,
   ExpandMore,
-  Search,
-  VideoCall,
-  Chat,
   Email,
   Phone,
   Forum,
-  Article,
-  PlayArrow,
-  Star,
-  ThumbUp,
-  AccessTime,
-  CheckCircle,
-  Error,
-  Info,
-  Warning,
-  Agriculture,
-  Nature,
-  WbSunny,
-  Opacity,
-  LocalFlorist,
-  BugReport,
-  TrendingUp,
-  Assessment,
-  Settings,
-  Smartphone,
-  Map,
-  Science,
-  People,
-  BarChart,
-  PieChart,
-  Timeline,
-  Cloud,
-  Security,
-  Shield,
-  Lock,
-  Visibility,
-  Wifi,
-  BatteryFull,
-  SignalCellular4Bar,
-  Bluetooth,
-  Usb,
-  VolumeUp,
-  Mic,
-  Videocam,
-  PhotoCamera,
-  Movie,
-  MusicNote,
-  QueueMusic,
-  LibraryMusic,
-  Album,
-  Repeat,
-  Shuffle,
-  SkipNext,
-  PlayCircle,
-  PauseCircle,
-  StopCircle,
-  FastForward,
-  Replay,
-  Subtitles,
-  Hd,
-  HighQuality,
-  Equalizer,
-  Brightness6,
-  Palette,
-  Tune,
-  Build,
-  Code,
-  Bug,
-  Undo,
-  Redo,
-  ZoomIn,
-  ZoomOut,
-  Fullscreen,
-  FullscreenExit,
-  VolumeDown,
-  VolumeMute,
-  VolumeOff,
-  MicOff,
-  VideocamOff,
-  CameraAlt,
-  MovieCreation,
-  MusicVideo,
-  RepeatOne,
-  SkipPrevious,
-  PlayCircleOutline,
-  PauseCircleOutline,
-  StopCircleOutline,
-  FastRewind,
-  Forward10,
-  Forward30,
-  Replay10,
-  Replay30,
-  ClosedCaption,
-  HighDefinition,
-  FourK,
-  SurroundSound,
-  GraphicEq,
-  Brightness4,
-  Brightness5,
-  Brightness7,
-  ColorLens,
-  Colorize,
-  FormatPaint,
-  Brush,
-  PaletteOutlined,
-  Style,
-  Texture,
-  Gradient,
-  BlurOn,
-  BlurOff,
-  Filter,
-  Filter1,
-  Filter2,
-  Filter3,
-  Filter4,
-  Filter5,
-  Filter6,
-  Filter7,
-  Filter8,
-  Filter9,
-  Filter9Plus,
-  FilterBAndW,
-  FilterCenterFocus,
-  FilterDrama,
-  FilterFrames,
-  FilterHdr,
-  FilterList,
-  FilterNone,
-  FilterTiltShift,
-  FilterVintage,
-  Flare,
-  FlashAuto,
-  FlashOff,
-  FlashOn,
-  Flip,
-  Gif,
-  Grain,
-  GridOff,
-  GridOn,
-  HdrOff,
-  HdrOn,
-  HdrStrong,
-  HdrWeak,
-  Healing,
-  Image,
-  ImageAspectRatio,
-  ImageSearch,
-  Iso,
-  Landscape,
-  LeakAdd,
-  LeakRemove,
-  Lens,
-  LinkedCamera,
-  Looks,
-  Looks3,
-  Looks4,
-  Looks5,
-  Looks6,
-  LooksOne,
-  LooksTwo,
-  Loupe,
-  MonochromePhotos,
-  MovieFilter,
-  MusicOff,
-  NaturePeople,
-  NavigateBefore,
-  NavigateNext,
-  Panorama,
-  PanoramaFishEye,
-  PanoramaHorizontal,
-  PanoramaVertical,
-  PanoramaWideAngle,
-  Photo,
-  PhotoAlbum,
-  PhotoCameraFront,
-  PhotoFilter,
-  PhotoLibrary,
-  PhotoSizeSelectActual,
-  PhotoSizeSelectLarge,
-  PhotoSizeSelectSmall,
-  PictureAsPdf,
-  Portrait,
-  Receipt,
-  RemoveRedEye,
-  Rotate90DegreesCcw,
-  RotateLeft,
-  RotateRight,
-  ShutterSpeed,
-  Slideshow,
-  Straighten,
-  StyleOutlined,
-  SwitchCamera,
-  SwitchVideo,
-  TagFaces,
-  Timer,
-  Timer3,
-  Timer10,
-  TimerOff,
-  Tonality,
-  Transform,
-
-  ViewComfy,
-  ViewCompact,
-  ViewList,
-  ViewModule,
-  ViewQuilt,
-  ViewStream,
-  Vignette,
-  WbAuto,
-  WbCloudy,
-  WbIncandescent,
-  WbIridescent,
-  WbShade,
-  WbTwilight,
-  Collections,
-  CollectionsBookmark,
-  ControlCamera,
-  ControlPoint,
-  ControlPointDuplicate,
-  Crop,
-  Crop169,
-  Crop32,
-  Crop54,
-  Crop75,
-  CropDin,
-  CropFree,
-  CropLandscape,
-  CropOriginal,
-  CropPortrait,
-  CropRotate,
-  CropSquare,
-  Dehaze,
-  Details,
-  Edit,
-  Euro,
-  Exposure,
-  ExposureNeg1,
-  ExposureNeg2,
-  ExposurePlus1,
-  ExposurePlus2,
-  ExposureZero,
-  FilterBAndWOutlined,
-  FilterCenterFocusOutlined,
-  FilterDramaOutlined,
-  FilterFramesOutlined,
-  FilterHdrOutlined,
-  FilterListOutlined,
-  FilterNoneOutlined,
-  FilterTiltShiftOutlined,
-  FilterVintageOutlined,
-  FlareOutlined,
-  FlashAutoOutlined,
-  FlashOffOutlined,
-  FlashOnOutlined,
-  FlipOutlined,
-  GifOutlined,
-  GrainOutlined,
-  GridOffOutlined,
-  GridOnOutlined,
-  HdrOffOutlined,
-  HdrOnOutlined,
-  HdrStrongOutlined,
-  HdrWeakOutlined,
-  HealingOutlined,
-  ImageOutlined,
-  ImageAspectRatioOutlined,
-  ImageSearchOutlined,
-  IsoOutlined,
-  LandscapeOutlined,
-  LeakAddOutlined,
-  LeakRemoveOutlined,
-  LensOutlined,
-  LinkedCameraOutlined,
-  LooksOutlined,
-  Looks3Outlined,
-  Looks4Outlined,
-  Looks5Outlined,
-  Looks6Outlined,
-  LooksOneOutlined,
-  LooksTwoOutlined,
-  LoupeOutlined,
-  MonochromePhotosOutlined,
-  MovieFilterOutlined,
-  MusicOffOutlined,
-  NaturePeopleOutlined,
-  NavigateBeforeOutlined,
-  NavigateNextOutlined,
-  PanoramaOutlined,
-  PanoramaFishEyeOutlined,
-  PanoramaHorizontalOutlined,
-  PanoramaVerticalOutlined,
-  PanoramaWideAngleOutlined,
-  PhotoOutlined,
-  PhotoAlbumOutlined,
-  PhotoCameraFrontOutlined,
-  PhotoFilterOutlined,
-  PhotoLibraryOutlined,
-  PhotoSizeSelectActualOutlined,
-  PhotoSizeSelectLargeOutlined,
-  PhotoSizeSelectSmallOutlined,
-  PictureAsPdfOutlined,
-  PortraitOutlined,
-  ReceiptOutlined,
-  RemoveRedEyeOutlined,
-  Rotate90DegreesCcwOutlined,
-  RotateLeftOutlined,
-  RotateRightOutlined,
-  ShutterSpeedOutlined,
-  SlideshowOutlined,
-  StraightenOutlined,
-  SwitchCameraOutlined,
-  SwitchVideoOutlined,
-  TagFacesOutlined,
-  TextureOutlined,
-  TimerOutlined,
-  Timer3Outlined,
-  Timer10Outlined,
-  TimerOffOutlined,
-  TonalityOutlined,
-  TransformOutlined,
-  TuneOutlined,
-  ViewComfyOutlined,
-  ViewCompactOutlined,
-  ViewListOutlined,
-  ViewModuleOutlined,
-  ViewQuiltOutlined,
-  ViewStreamOutlined,
-  VignetteOutlined,
-  WbAutoOutlined,
-  WbCloudyOutlined,
-  WbIncandescentOutlined,
-  WbIridescentOutlined,
-  WbShadeOutlined,
-  WbTwilightOutlined,
-  CollectionsOutlined,
-  CollectionsBookmarkOutlined,
-  ControlCameraOutlined,
-  ControlPointOutlined,
-  ControlPointDuplicateOutlined,
-  CropOutlined,
-  Crop169Outlined,
-  Crop32Outlined,
-  Crop54Outlined,
-  Crop75Outlined,
-  CropDinOutlined,
-  CropFreeOutlined,
-  CropLandscapeOutlined,
-  CropOriginalOutlined,
-  CropPortraitOutlined,
-  CropRotateOutlined,
-  CropSquareOutlined,
-  DehazeOutlined,
-  DetailsOutlined,
-  EditOutlined,
-  EuroOutlined,
-  ExposureOutlined,
-  ExposureNeg1Outlined,
-  ExposureNeg2Outlined,
-  ExposurePlus1Outlined,
-  ExposurePlus2Outlined,
-  ExposureZeroOutlined,
 } from '@mui/icons-material';
 
 const HelpSupport = () => {
@@ -421,74 +37,87 @@ const HelpSupport = () => {
       question: 'How can I view my financial reports?',
       answer: 'Go to Financial Reports in the sidebar to access detailed profit and loss statements, expense tracking, and revenue analytics.'
     },
+    {
+      question: 'Is my data secure?',
+      answer: 'Yes, we use enterprise-grade encryption for all your farm data and personal information.'
+    },
   ];
 
   return (
-    <Container maxWidth="xl">
-      <Box sx={{ mt: 4 }}>
-        <Typography variant="h4" gutterBottom>
+    <Box sx={{ pb: 4 }}>
+      <Box sx={{ mb: 4 }}>
+        <Typography variant="h4" gutterBottom fontWeight={700} color="primary.main">
           Help & Support
         </Typography>
-        <Typography variant="body1" sx={{ mb: 4 }}>
-          Find answers to common questions and get support for your farming operations.
+        <Typography variant="body1" color="text.secondary">
+          Resources, FAQs, and contact channels for assistance.
         </Typography>
-
-        <Grid container spacing={3}>
-          <Grid item xs={12} md={6}>
-            <Card>
-              <CardHeader
-                title="Documentation"
-                avatar={<Book />}
-              />
-              <CardContent>
-                <Typography variant="body2" sx={{ mb: 2 }}>
-                  Access comprehensive guides and tutorials for all features.
-                </Typography>
-                <Button variant="contained">
-                  View Documentation
-                </Button>
-              </CardContent>
-            </Card>
-          </Grid>
-          <Grid item xs={12} md={6}>
-            <Card>
-              <CardHeader
-                title="Contact Support"
-                avatar={<ContactSupport />}
-              />
-              <CardContent>
-                <Typography variant="body2" sx={{ mb: 2 }}>
-                  Need help? Our support team is here to assist you.
-                </Typography>
-                <Button variant="outlined">
-                  Contact Support
-                </Button>
-              </CardContent>
-            </Card>
-          </Grid>
-          <Grid item xs={12}>
-            <Card>
-              <CardHeader
-                title="Frequently Asked Questions"
-                avatar={<Help />}
-              />
-              <CardContent>
-                {faqs.map((faq, index) => (
-                  <Accordion key={index}>
-                    <AccordionSummary expandIcon={<ExpandMore />}>
-                      <Typography>{faq.question}</Typography>
-                    </AccordionSummary>
-                    <AccordionDetails>
-                      <Typography>{faq.answer}</Typography>
-                    </AccordionDetails>
-                  </Accordion>
-                ))}
-              </CardContent>
-            </Card>
-          </Grid>
-        </Grid>
       </Box>
-    </Container>
+
+      <Grid container spacing={3}>
+        <Grid item xs={12} md={6}>
+          <Card sx={{ height: '100%' }}>
+            <CardHeader
+              title="Documentation Center"
+              avatar={<Avatar sx={{ bgcolor: 'primary.main' }}><Book /></Avatar>}
+            />
+            <Divider />
+            <CardContent>
+              <Typography variant="body2" sx={{ mb: 3 }}>
+                Access comprehensive user guides, video tutorials, and API documentation to get the most out of AgriAI.
+              </Typography>
+              <Button variant="contained" fullWidth>
+                Browse Guides
+              </Button>
+            </CardContent>
+          </Card>
+        </Grid>
+        <Grid item xs={12} md={6}>
+          <Card sx={{ height: '100%' }}>
+            <CardHeader
+              title="Contact Support"
+              avatar={<Avatar sx={{ bgcolor: 'secondary.main' }}><ContactSupport /></Avatar>}
+            />
+            <Divider />
+            <CardContent>
+              <Grid container spacing={2}>
+                <Grid item xs={6}>
+                  <Button variant="outlined" fullWidth startIcon={<Email />}>Email Us</Button>
+                </Grid>
+                <Grid item xs={6}>
+                  <Button variant="outlined" fullWidth startIcon={<Phone />}>Call Us</Button>
+                </Grid>
+                <Grid item xs={12}>
+                  <Button variant="outlined" fullWidth startIcon={<Forum />}>Live Chat</Button>
+                </Grid>
+              </Grid>
+            </CardContent>
+          </Card>
+        </Grid>
+        <Grid item xs={12}>
+          <Card>
+            <CardHeader
+              title="Frequently Asked Questions"
+              avatar={<Avatar sx={{ bgcolor: 'info.main' }}><Help /></Avatar>}
+            />
+            <Divider />
+            <CardContent>
+              {faqs.map((faq, index) => (
+                <Accordion key={index} disableGutters elevation={0} sx={{ '&:before': { display: 'none' } }}>
+                  <AccordionSummary expandIcon={<ExpandMore />}>
+                    <Typography fontWeight={500}>{faq.question}</Typography>
+                  </AccordionSummary>
+                  <AccordionDetails>
+                    <Typography variant="body2" color="text.secondary">{faq.answer}</Typography>
+                  </AccordionDetails>
+                  {index < faqs.length - 1 && <Divider />}
+                </Accordion>
+              ))}
+            </CardContent>
+          </Card>
+        </Grid>
+      </Grid>
+    </Box>
   );
 };
 

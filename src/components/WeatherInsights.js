@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Typography, Container, Box, Grid, Card, CardContent, CardHeader, CircularProgress, Alert } from '@mui/material';
-import { Cloud, Thermostat as Thermometer, Opacity, WindPower } from '@mui/icons-material';
+import { Typography, Container, Box, Grid, Card, CardContent, CardHeader, CircularProgress, Alert, Avatar, Divider, LinearProgress, Stack } from '@mui/material';
+import { Cloud, Thermostat as Thermometer, Opacity, WindPower, WbSunny, WaterDrop } from '@mui/icons-material';
 
 const WeatherInsights = ({ location }) => {
   const [weatherData, setWeatherData] = useState(null);
@@ -35,121 +35,123 @@ const WeatherInsights = ({ location }) => {
 
   if (loading) {
     return (
-      <Container maxWidth="xl">
-        <Box sx={{ mt: 4, display: 'flex', justifyContent: 'center' }}>
-          <CircularProgress />
-        </Box>
-      </Container>
+      <Box sx={{ mt: 4, display: 'flex', justifyContent: 'center', height: '50vh', alignItems: 'center' }}>
+        <CircularProgress />
+      </Box>
     );
   }
 
   if (error) {
     return (
-      <Container maxWidth="xl">
-        <Box sx={{ mt: 4 }}>
-          <Alert severity="error">
-            Failed to load weather data: {error}
-          </Alert>
-        </Box>
-      </Container>
+      <Box sx={{ mt: 4 }}>
+        <Alert severity="error">
+          Failed to load weather data: {error}
+        </Alert>
+      </Box>
     );
   }
 
   return (
-    <Container maxWidth="xl">
-      <Box sx={{ mt: 4 }}>
-        <Typography variant="h4" gutterBottom>
+    <Box sx={{ pb: 4 }}>
+      <Box sx={{ mb: 4 }}>
+        <Typography variant="h4" gutterBottom fontWeight={700} color="primary.main">
           Weather Insights
         </Typography>
-        <Typography variant="body1" sx={{ mb: 4 }}>
-          Real-time weather data and forecasts for better farming decisions.
+        <Typography variant="body1" color="text.secondary">
+          Real-time weather data and forecasts for <strong>{location || 'Current Location'}</strong>.
         </Typography>
-
-        <Grid container spacing={3}>
-          <Grid item xs={12} md={3}>
-            <Card>
-              <CardHeader
-                title="Temperature"
-                avatar={<Thermometer />}
-              />
-              <CardContent>
-                <Typography variant="h5">{weatherData?.temperature}°C</Typography>
-                <Typography variant="body2" color="text.secondary">
-                  Feels like {Math.round(weatherData?.temperature + 2)}°C
-                </Typography>
-              </CardContent>
-            </Card>
-          </Grid>
-          <Grid item xs={12} md={3}>
-            <Card>
-              <CardHeader
-                title="Humidity"
-                avatar={<Opacity />}
-              />
-              <CardContent>
-                <Typography variant="h5">{weatherData?.humidity}%</Typography>
-                <Typography variant="body2" color="text.secondary">
-                  Dew point: {Math.round(weatherData?.temperature - (100 - weatherData?.humidity) / 5)}°C
-                </Typography>
-              </CardContent>
-            </Card>
-          </Grid>
-          <Grid item xs={12} md={3}>
-            <Card>
-              <CardHeader
-                title="Wind Speed"
-                avatar={<WindPower />}
-              />
-              <CardContent>
-                <Typography variant="h5">{weatherData?.windSpeed} km/h</Typography>
-                <Typography variant="body2" color="text.secondary">
-                  Direction: NW
-                </Typography>
-              </CardContent>
-            </Card>
-          </Grid>
-          <Grid item xs={12} md={3}>
-            <Card>
-              <CardHeader
-                title="Precipitation"
-                avatar={<Cloud />}
-              />
-              <CardContent>
-                <Typography variant="h5">{weatherData?.precipitation} mm</Typography>
-                <Typography variant="body2" color="text.secondary">
-                  Next 24h: {weatherData?.forecast?.[1]?.precipitation || 0} mm
-                </Typography>
-              </CardContent>
-            </Card>
-          </Grid>
-        </Grid>
-
-        {/* Forecast Section */}
-        <Box sx={{ mt: 4 }}>
-          <Typography variant="h5" gutterBottom>
-            4-Day Forecast
-          </Typography>
-          <Grid container spacing={2}>
-            {weatherData?.forecast?.map((day, index) => (
-              <Grid item xs={12} sm={6} md={3} key={index}>
-                <Card>
-                  <CardContent>
-                    <Typography variant="h6">{day.day}</Typography>
-                    <Typography variant="h5">{day.temp}°C</Typography>
-                    <Typography variant="body2" color="text.secondary">
-                      {day.condition}
-                    </Typography>
-                    <Typography variant="body2" color="text.secondary">
-                      Precipitation: {day.precipitation}%
-                    </Typography>
-                  </CardContent>
-                </Card>
-              </Grid>
-            ))}
-          </Grid>
-        </Box>
       </Box>
-    </Container>
+
+      <Grid container spacing={3}>
+        <Grid item xs={12} md={3}>
+          <Card sx={{ height: '100%' }}>
+            <CardHeader
+              title="Temperature"
+              avatar={<Avatar sx={{ bgcolor: 'warning.light' }}><Thermometer color="warning" /></Avatar>}
+            />
+            <CardContent>
+              <Typography variant="h3" fontWeight={700}>{weatherData?.temperature}°C</Typography>
+              <Typography variant="body2" color="text.secondary">
+                Feels like {Math.round(weatherData?.temperature + 2)}°C
+              </Typography>
+            </CardContent>
+          </Card>
+        </Grid>
+        <Grid item xs={12} md={3}>
+          <Card sx={{ height: '100%' }}>
+            <CardHeader
+              title="Humidity"
+              avatar={<Avatar sx={{ bgcolor: 'info.light' }}><Opacity color="info" /></Avatar>}
+            />
+            <CardContent>
+              <Typography variant="h3" fontWeight={700}>{weatherData?.humidity}%</Typography>
+              <Stack spacing={1} sx={{ mt: 1 }}>
+                <LinearProgress variant="determinate" value={weatherData?.humidity} color="info" sx={{ height: 6, borderRadius: 3 }} />
+                <Typography variant="caption" color="text.secondary">Relative Humidity</Typography>
+              </Stack>
+            </CardContent>
+          </Card>
+        </Grid>
+        <Grid item xs={12} md={3}>
+          <Card sx={{ height: '100%' }}>
+            <CardHeader
+              title="Wind"
+              avatar={<Avatar sx={{ bgcolor: 'grey.300' }}><WindPower color="action" /></Avatar>}
+            />
+            <CardContent>
+              <Typography variant="h3" fontWeight={700}>{weatherData?.windSpeed} <Typography component="span" variant="h5" color="text.secondary">km/h</Typography></Typography>
+              <Typography variant="body2" color="text.secondary">
+                Direction: North-West
+              </Typography>
+            </CardContent>
+          </Card>
+        </Grid>
+        <Grid item xs={12} md={3}>
+          <Card sx={{ height: '100%' }}>
+            <CardHeader
+              title="Precipitation"
+              avatar={<Avatar sx={{ bgcolor: 'primary.light' }}><Cloud color="primary" /></Avatar>}
+            />
+            <CardContent>
+              <Typography variant="h3" fontWeight={700}>{weatherData?.precipitation} <Typography component="span" variant="h5" color="text.secondary">mm</Typography></Typography>
+              <Typography variant="body2" color="text.secondary">
+                Chance of Rain: {weatherData?.forecast?.[0]?.precipitation > 0 ? 'High' : 'Low'}
+              </Typography>
+            </CardContent>
+          </Card>
+        </Grid>
+      </Grid>
+
+      {/* Forecast Section */}
+      <Box sx={{ mt: 5 }}>
+        <Typography variant="h5" gutterBottom fontWeight={600}>
+          4-Day Forecast
+        </Typography>
+        <Grid container spacing={2}>
+          {weatherData?.forecast?.map((day, index) => (
+            <Grid item xs={12} sm={6} md={3} key={index}>
+              <Card variant="outlined" sx={{ bgcolor: 'background.default' }}>
+                <CardContent sx={{ textAlign: 'center' }}>
+                  <Typography variant="subtitle1" fontWeight={700} gutterBottom>{day.day}</Typography>
+                  <Box sx={{ my: 2 }}>
+                    {day.condition === 'Sunny' ? <WbSunny color="warning" fontSize="large" /> : <Cloud color="info" fontSize="large" />}
+                  </Box>
+                  <Typography variant="h4" sx={{ mb: 1 }}>{day.temp}°C</Typography>
+                  <Typography variant="body2" color="text.secondary" gutterBottom>
+                    {day.condition}
+                  </Typography>
+                  <Divider sx={{ my: 1 }} />
+                  <Stack direction="row" alignItems="center" justify="center" spacing={1} sx={{ justifyContent: 'center' }}>
+                    <WaterDrop fontSize="small" color="primary" />
+                    <Typography variant="caption">{day.precipitation}% precip</Typography>
+                  </Stack>
+                </CardContent>
+              </Card>
+            </Grid>
+          ))}
+        </Grid>
+      </Box>
+    </Box>
   );
 };
 

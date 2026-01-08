@@ -1,70 +1,118 @@
 import React from 'react';
-import { Typography, Container, Box, Grid, Card, CardContent, CardHeader, Button } from '@mui/material';
-import { Map, GpsFixed, Layers, ZoomIn } from '@mui/icons-material';
+import {
+  Typography,
+  Box,
+  Grid,
+  Card,
+  CardContent,
+  CardHeader,
+  Button,
+  Avatar,
+  Divider,
+  Stack,
+  Chip
+} from '@mui/material';
+import { Map, GpsFixed, Layers, ZoomIn, Edit, Share } from '@mui/icons-material';
 
 const FieldMapping = () => {
   return (
-    <Container maxWidth="xl">
-      <Box sx={{ mt: 4 }}>
-        <Typography variant="h4" gutterBottom>
+    <Box sx={{ pb: 4 }}>
+      <Box sx={{ mb: 4 }}>
+        <Typography variant="h4" gutterBottom fontWeight={700} color="primary.main">
           Field Mapping
         </Typography>
-        <Typography variant="body1" sx={{ mb: 4 }}>
-          Visualize and manage your farm fields with detailed mapping tools.
+        <Typography variant="body1" color="text.secondary">
+          Interactive field boundaries, soil zones, and crop distribution maps.
         </Typography>
+      </Box>
 
-        <Grid container spacing={3}>
-          <Grid item xs={12} md={8}>
-            <Card>
-              <CardHeader
-                title="Field Overview"
-                avatar={<Map />}
-              />
-              <CardContent>
-                <Box sx={{ height: 400, bgcolor: 'grey.100', display: 'flex', alignItems: 'center', justifyContent: 'center', mb: 2 }}>
+      <Grid container spacing={3}>
+        <Grid item xs={12} md={8}>
+          <Card sx={{ height: '100%' }}>
+            <CardHeader
+              title="Field Map"
+              subheader="Viewing: Main Farm"
+              avatar={<Avatar sx={{ bgcolor: 'info.main' }}><Map /></Avatar>}
+              action={
+                <Stack direction="row" spacing={1}>
+                  <Button size="small" startIcon={<Share />}>Share</Button>
+                  <Button size="small" startIcon={<Edit />}>Edit</Button>
+                </Stack>
+              }
+            />
+            <Divider />
+            <CardContent>
+              <Box sx={{
+                height: 450,
+                bgcolor: 'grey.100',
+                borderRadius: 2,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                mb: 2,
+                border: '1px dashed #ccc'
+              }}>
+                <Typography variant="body1" color="text.secondary">
+                  Interactive Map Component Placeholder
+                  <br />
+                  (Google Maps / Leaflet Integration)
+                </Typography>
+              </Box>
+              <Stack direction="row" spacing={2} justifyContent="center">
+                <Button variant="outlined" startIcon={<ZoomIn />}>
+                  Zoom In
+                </Button>
+                <Button variant="outlined" startIcon={<Layers />}>
+                  Layers
+                </Button>
+                <Button variant="outlined" startIcon={<GpsFixed />}>
+                  Locate Me
+                </Button>
+              </Stack>
+            </CardContent>
+          </Card>
+        </Grid>
+        <Grid item xs={12} md={4}>
+          <Card sx={{ height: '100%' }}>
+            <CardHeader
+              title="Field Statistics"
+              avatar={<Avatar sx={{ bgcolor: 'success.main' }}><Layers /></Avatar>}
+            />
+            <Divider />
+            <CardContent>
+              <Stack spacing={2}>
+                <Box>
+                  <Typography variant="subtitle2" gutterBottom>Total Area</Typography>
+                  <Typography variant="h4" color="primary">250 <Typography component="span" variant="h6">ha</Typography></Typography>
+                </Box>
+                <Divider />
+                <Box>
+                  <Typography variant="subtitle2" gutterBottom>Active Crops</Typography>
+                  <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap>
+                    <Chip label="Corn (120 ha)" color="success" variant="outlined" />
+                    <Chip label="Wheat (80 ha)" color="warning" variant="outlined" />
+                    <Chip label="Soy (50 ha)" color="secondary" variant="outlined" />
+                  </Stack>
+                </Box>
+                <Divider />
+                <Box>
+                  <Typography variant="subtitle2" gutterBottom>Soil Zones</Typography>
                   <Typography variant="body2" color="text.secondary">
-                    Interactive Map Placeholder
+                    3 distinct soil types identified.
+                    <br />
+                    - Loam (60%)
+                    <br />
+                    - Clay (30%)
+                    <br />
+                    - Sandy (10%)
                   </Typography>
                 </Box>
-                <Box sx={{ display: 'flex', gap: 1 }}>
-                  <Button variant="outlined" startIcon={<ZoomIn />}>
-                    Zoom In
-                  </Button>
-                  <Button variant="outlined" startIcon={<Layers />}>
-                    Toggle Layers
-                  </Button>
-                  <Button variant="outlined" startIcon={<GpsFixed />}>
-                    GPS Location
-                  </Button>
-                </Box>
-              </CardContent>
-            </Card>
-          </Grid>
-          <Grid item xs={12} md={4}>
-            <Card>
-              <CardHeader
-                title="Field Details"
-                avatar={<Map />}
-              />
-              <CardContent>
-                <Typography variant="body2" sx={{ mb: 1 }}>
-                  <strong>Total Area:</strong> 250 hectares
-                </Typography>
-                <Typography variant="body2" sx={{ mb: 1 }}>
-                  <strong>Crops:</strong> Corn, Wheat, Soybeans
-                </Typography>
-                <Typography variant="body2" sx={{ mb: 2 }}>
-                  <strong>Zones:</strong> 5 irrigation zones
-                </Typography>
-                <Button variant="contained" fullWidth>
-                  Edit Field Boundaries
-                </Button>
-              </CardContent>
-            </Card>
-          </Grid>
+              </Stack>
+            </CardContent>
+          </Card>
         </Grid>
-      </Box>
-    </Container>
+      </Grid>
+    </Box>
   );
 };
 
